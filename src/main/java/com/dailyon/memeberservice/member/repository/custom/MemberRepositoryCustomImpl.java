@@ -1,4 +1,5 @@
 package com.dailyon.memeberservice.member.repository.custom;
 
-public class MemberRepositoryCustomImpl {
+public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
+
 }
