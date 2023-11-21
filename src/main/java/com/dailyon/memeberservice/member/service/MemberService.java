@@ -43,25 +43,21 @@ public class MemberService {
         return member.getId();
     }
 
+    public Member getMember(Long id) {
+        return memberRepository.findById(id).orElseThrow();
+    }
+
     @Transactional
     public Long modifyMember(MemberModifyRequest request, Long id){
-        System.out.println("############################");
-        System.out.println(id);
-        System.out.println("############################");
         Member member = memberRepository.findById(id).orElseThrow();
-
-        System.out.println("############################");
-        System.out.println(member);
-        System.out.println("############################");
-
         String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME); // 현재 날짜로 설정
 
         String profileImgUrl = Optional.ofNullable(request.getProfileImgUrl())
-                .orElse(member.getProfileImgUrl()); // 기존값으로 설정
+                .orElse(member.getProfileImgUrl());
         String gender = Optional.ofNullable(request.getGender())
-                .orElse(member.getGender()); // 기존값으로 설정
+                .orElse(member.getGender());
         String birth = Optional.ofNullable(request.getBirth())
-                .orElse(member.getBirth()); // 기존값으로 설정
+                .orElse(member.getBirth());
 
         member.changeMember(
                 request.getEmail(),
@@ -82,6 +78,7 @@ public class MemberService {
 
         return id;
     }
+
 
 
 }
