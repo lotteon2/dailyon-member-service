@@ -1,7 +1,7 @@
 package com.dailyon.memeberservice.member.service;
 
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
-import com.dailyon.memeberservice.member.api.request.MemberGetRequest;
+import com.dailyon.memeberservice.member.api.request.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
@@ -46,9 +46,9 @@ public class MemberService {
         return member.getId();
     }
 
-    public MemberGetRequest getMember(Long id) {
+    public MemberGetResponse getMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow();
-        MemberGetRequest response = new MemberGetRequest();
+        MemberGetResponse response = new MemberGetResponse();
 
         response.setEmail(member.getEmail());
         response.setProfileImgUrl(member.getProfileImgUrl());

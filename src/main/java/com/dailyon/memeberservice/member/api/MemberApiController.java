@@ -1,7 +1,7 @@
 package com.dailyon.memeberservice.member.api;
 
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
-import com.dailyon.memeberservice.member.api.request.MemberGetRequest;
+import com.dailyon.memeberservice.member.api.request.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.service.MemberService;
@@ -27,7 +27,7 @@ public class MemberApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberGetRequest> getMember(@PathVariable Long id) {
+    public ResponseEntity<MemberGetResponse> getMember(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.getMember(id));
     }
 
