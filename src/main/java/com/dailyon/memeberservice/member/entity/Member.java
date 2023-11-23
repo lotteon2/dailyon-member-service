@@ -4,10 +4,7 @@ import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Entity
@@ -16,14 +13,29 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String profileImgUrl;
+
     private String gender;
+
     private String birth;
+
+    @Column(nullable = false)
     private String createdAt;
+
+    @Column(nullable = false)
     private String updatedAt;
+
+    @Column(nullable = false)
     private String code;
+
+    @Column(nullable = false)
     private Long point;
+
+    @Column(nullable = false)
     private boolean isDeleted;
 
     public Member() {
@@ -57,7 +69,6 @@ public class Member {
 
 
     public void changeMember (
-            String email,
             String profileImgUrl,
             String birth,
             String gender,

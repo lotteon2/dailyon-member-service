@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberCreateRequest {
-    private Long id;
 
     private String email;
 
@@ -20,13 +19,4 @@ public class MemberCreateRequest {
 
     private String birth;
 
-    private String createdAt;
-
-    private String updatedAt;
-
-    private String code;
-
-    private Long point;
-
-    private boolean isDeleted;
 }
