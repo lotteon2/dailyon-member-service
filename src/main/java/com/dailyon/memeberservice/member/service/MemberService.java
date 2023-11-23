@@ -37,6 +37,8 @@ public class MemberService {
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .code(code)
+                .point(0L)
+                .isDelted(false)
                 .build();
         memberRepository.save(member);
 
