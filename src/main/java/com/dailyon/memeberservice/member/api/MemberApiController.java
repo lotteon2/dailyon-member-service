@@ -1,14 +1,12 @@
 package com.dailyon.memeberservice.member.api;
 
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
+import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
-import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Clock;
 
 @RestController
 @RequestMapping("/member")
@@ -25,8 +23,8 @@ public class MemberApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.registerMember(request));
     }
 
-    @GetMapping("/info/{id}")
-    public ResponseEntity<Member> getMember(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberGetResponse> getMember(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.getMember(id));
     }
 
