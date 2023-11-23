@@ -11,9 +11,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class MemberModifyRequest{
 
-    @NotNull(message = "email null error")
-    private String email;
-
     @NotNull(message = "profileImgUrl null error")
     private String profileImgUrl;
 

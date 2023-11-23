@@ -52,7 +52,7 @@ public class MemberService {
     @Transactional
     public Long modifyMember(MemberModifyRequest request, Long id){
         Member member = memberRepository.findById(id).orElseThrow();
-        String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME); // 현재 날짜로 설정
+        String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         String profileImgUrl = Optional.ofNullable(request.getProfileImgUrl())
                 .orElse(member.getProfileImgUrl());

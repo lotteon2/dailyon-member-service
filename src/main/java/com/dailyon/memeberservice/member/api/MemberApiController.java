@@ -30,13 +30,12 @@ public class MemberApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.getMember(id));
     }
 
-    @PostMapping("/modify/{id}")
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Long> modifyMember(@RequestBody MemberModifyRequest request, @PathVariable Long id){
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.modifyMember(request, id));
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteMember(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.softDelete(id));
     }
