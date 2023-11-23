@@ -60,7 +60,6 @@ public class MemberService {
                 .orElse(member.getBirth());
 
         member.changeMember(
-                request.getEmail(),
                 profileImgUrl,
                 birth,
                 gender,

@@ -57,7 +57,6 @@ public class Member {
 
 
     public void changeMember (
-            String email,
             String profileImgUrl,
             String birth,
             String gender,

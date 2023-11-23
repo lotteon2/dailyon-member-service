@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MemberCreateRequest {
-    private Long id;
 
     private String email;
 
