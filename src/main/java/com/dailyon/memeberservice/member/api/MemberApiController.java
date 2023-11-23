@@ -1,15 +1,12 @@
 package com.dailyon.memeberservice.member.api;
 
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
-import com.dailyon.memeberservice.member.api.request.MemberGetResponse;
+import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
-import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.Clock;
 
 @RestController
 @RequestMapping("/member")

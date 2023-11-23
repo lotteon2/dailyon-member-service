@@ -1,4 +1,4 @@
-package com.dailyon.memeberservice.member.api.request;
+package com.dailyon.memeberservice.member.api.response;
 
 import lombok.Getter;
 import lombok.Setter;

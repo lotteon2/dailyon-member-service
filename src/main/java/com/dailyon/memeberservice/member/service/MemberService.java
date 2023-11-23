@@ -1,7 +1,7 @@
 package com.dailyon.memeberservice.member.service;
 
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
-import com.dailyon.memeberservice.member.api.request.MemberGetResponse;
+import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
