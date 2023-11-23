@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberGetRequest {
+public class MemberGetResponse {
 
     private String email;
 
