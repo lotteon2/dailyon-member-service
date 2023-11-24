@@ -28,6 +28,11 @@ public class MemberApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.getMember(id));
     }
 
+    @GetMapping("/check/{email}")
+    public boolean duplicateCheck(@PathVariable String email) {
+        return memberService.MemberDuplicateCheck(email);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Long> modifyMember(@RequestBody MemberModifyRequest request, @PathVariable Long id){
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.modifyMember(request, id));
