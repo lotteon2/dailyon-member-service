@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @CrossOrigin(origins = "*")
 public class MemberApiController {
     private final MemberService memberService;
@@ -26,6 +26,11 @@ public class MemberApiController {
     @GetMapping("/{id}")
     public ResponseEntity<MemberGetResponse> getMember(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.getMember(id));
+    }
+
+    @GetMapping("/check/{email}")
+    public boolean duplicateCheck(@PathVariable String email) {
+        return memberService.MemberDuplicateCheck(email);
     }
 
     @PutMapping("/{id}")

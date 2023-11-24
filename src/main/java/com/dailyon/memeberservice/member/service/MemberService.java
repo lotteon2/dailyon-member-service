@@ -59,6 +59,11 @@ public class MemberService {
         return response;
     }
 
+    public boolean MemberDuplicateCheck(String email){
+
+        return memberRepository.findByEmail(email);
+    }
+
     @Transactional
     public Long modifyMember(MemberModifyRequest request, Long id){
         Member member = memberRepository.findById(id).orElseThrow();
