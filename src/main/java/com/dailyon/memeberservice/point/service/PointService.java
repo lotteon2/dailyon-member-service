@@ -43,8 +43,8 @@ public class PointService {
                 .utilize(request.getUtilize())
                 .createdAt(createdAt)
                 .build();
-        pointRepository.save(pointHistory);
 
+        pointRepository.save(pointHistory);
         changePoint(request.getAmount());
     }
 
