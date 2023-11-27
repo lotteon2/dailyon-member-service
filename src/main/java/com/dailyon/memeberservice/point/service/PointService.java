@@ -29,7 +29,6 @@ public class PointService {
                 .build();
 
         pointRepository.save(pointHistory);
-
         changePoint(request.getAmount());
     }
 
