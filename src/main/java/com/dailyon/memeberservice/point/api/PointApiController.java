@@ -1,11 +1,7 @@
 package com.dailyon.memeberservice.point.api;
 
-import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
-import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
-import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
-import com.dailyon.memeberservice.member.service.MemberService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.dailyon.memeberservice.point.api.request.PointHistoryRequest;
+import com.dailyon.memeberservice.point.service.PointService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,4 +9,18 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class PointApiController {
 
+    private final PointService pointService;
+
+    public PointApiController(PointService pointService) {
+        this.pointService = pointService;
+    }
+
+    @PostMapping("/use")
+    public void usePoint(@RequestBody PointHistoryRequest request){
+        pointService.usePoint(request);
+    }
+    @PostMapping("/add")
+    public void addPoint(@RequestBody PointHistoryRequest request){
+        pointService.addPoint(request);
+    }
 }
