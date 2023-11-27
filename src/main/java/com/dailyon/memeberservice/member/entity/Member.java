@@ -80,6 +80,11 @@ public class Member {
         this.updatedAt = updatedAt;
     }
 
+    public void changePoint(Long amount)
+    {
+        this.point += amount;
+    }
+
 
     public void softDelete() {
         this.isDeleted = true;
