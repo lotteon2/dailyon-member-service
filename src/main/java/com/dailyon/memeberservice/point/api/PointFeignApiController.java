@@ -3,6 +3,8 @@ package com.dailyon.memeberservice.point.api;
 import com.dailyon.memeberservice.point.api.request.PointHistoryRequest;
 import com.dailyon.memeberservice.point.api.response.GetPointHistory;
 import com.dailyon.memeberservice.point.service.PointService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +21,13 @@ public class PointFeignApiController {
     }
 
     @PostMapping("/use")
-    public void usePoint(@RequestBody PointHistoryRequest request){
+    public ResponseEntity<Object>usePoint(@RequestBody PointHistoryRequest request){
         pointService.usePoint(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     @PostMapping("/add")
-    public void addPoint(@RequestBody PointHistoryRequest request){
+    public ResponseEntity<Object> addPoint(@RequestBody PointHistoryRequest request){
         pointService.addPoint(request);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

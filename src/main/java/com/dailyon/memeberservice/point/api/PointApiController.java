@@ -1,9 +1,9 @@
 package com.dailyon.memeberservice.point.api;
 
-import com.dailyon.memeberservice.point.api.request.PointHistoryRequest;
 import com.dailyon.memeberservice.point.api.response.GetPointHistory;
-import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.service.PointService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class PointApiController {
     }
 
     @GetMapping("/{id}")
-    public List<GetPointHistory> getPointHistory(@PathVariable Long id){
-        return pointService.getPointHistory(id);
+    public ResponseEntity<List<GetPointHistory>> getPointHistory(@PathVariable Long id){
+       return ResponseEntity.status(HttpStatus.OK).body(pointService.getPointHistory(id));
     }
 }
