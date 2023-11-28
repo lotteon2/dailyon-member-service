@@ -56,6 +56,4 @@ public class PointService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough points", e);
         }
     }
-
-
 }
