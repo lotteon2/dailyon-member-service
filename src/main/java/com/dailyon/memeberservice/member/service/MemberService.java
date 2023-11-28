@@ -60,7 +60,6 @@ public class MemberService {
     }
 
     public boolean MemberDuplicateCheck(String email){
-
         return memberRepository.findByEmail(email);
     }
 
