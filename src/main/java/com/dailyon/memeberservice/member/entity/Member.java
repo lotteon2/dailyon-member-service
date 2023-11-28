@@ -3,11 +3,18 @@ package com.dailyon.memeberservice.member.entity;
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +30,13 @@ public class Member {
 
     private String birth;
 
-    @Column(nullable = false)
-    private String createdAt;
+    @Column(nullable = false, columnDefinition = "timestamp default now()")
+    @CreatedDate
+    private LocalDateTime  createdAt;
 
-    @Column(nullable = false)
-    private String updatedAt;
+    @Column(nullable = false, columnDefinition = "timestamp default now()")
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private String code;
@@ -50,20 +59,18 @@ public class Member {
         String profileImgUrl,
         String gender,
         String birth,
-        String createdAt,
-        String updatedAt,
         String code,
         Long point,
+        LocalDateTime createdAt,
         boolean isDelted) {
         this.id = id;
         this.email = email;
         this.profileImgUrl = profileImgUrl;
         this.gender = gender;
         this.birth = birth;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.code = code;
         this.point = point;
+        this.createdAt = createdAt;
     }
 
 
@@ -71,13 +78,19 @@ public class Member {
     public void changeMember (
             String profileImgUrl,
             String birth,
-            String gender,
-            String updatedAt) {
+            String gender
+    ) {
         this.email = email;
         this.profileImgUrl = profileImgUrl;
         this.gender = gender;
         this.birth = birth;
-        this.updatedAt = updatedAt;
+    }
+
+    public void changePoint(Long amount) {
+        if (this.point + amount < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough points");
+        }
+        this.point += amount;
     }
 
 

@@ -26,8 +26,6 @@ public class MemberService {
                 .orElse("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Fkr%2Ffree-icon%2Fgithub-logo_25231&psig=AOvVaw0pcr5--c2h4nyBbrQ9pzPb&ust=1700566691294000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCICL2t--0oIDFQAAAAAdAAAAABAD");
         String gender = Optional.ofNullable(request.getGender())
                 .orElse("");
-        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
-        String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
         String code = UUID.randomUUID().toString();
 
         Member member = Member.builder()
@@ -35,8 +33,7 @@ public class MemberService {
                 .profileImgUrl(profileImgUrl)
                 .gender(gender)
                 .birth(request.getBirth())
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
+
                 .code(code)
                 .point(0L)
                 .isDelted(false)
@@ -60,14 +57,12 @@ public class MemberService {
     }
 
     public boolean MemberDuplicateCheck(String email){
-
         return memberRepository.findByEmail(email);
     }
 
     @Transactional
     public Long modifyMember(MemberModifyRequest request, Long id){
         Member member = memberRepository.findById(id).orElseThrow();
-        String updatedAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
 
         String profileImgUrl = Optional.ofNullable(request.getProfileImgUrl())
                 .orElse(member.getProfileImgUrl());
@@ -79,8 +74,7 @@ public class MemberService {
         member.changeMember(
                 profileImgUrl,
                 birth,
-                gender,
-                updatedAt
+                gender
         );
 
         return id;
