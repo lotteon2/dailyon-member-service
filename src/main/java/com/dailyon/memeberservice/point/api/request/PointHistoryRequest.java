@@ -12,8 +12,6 @@ public class PointHistoryRequest {
 
     private long memberId;
 
-    private boolean status;
-
     private PointSource source;
 
     private long amount;
