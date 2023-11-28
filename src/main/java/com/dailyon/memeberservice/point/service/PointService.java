@@ -53,10 +53,7 @@ public class PointService {
 
 
         Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
-        try {
-            member.changePoint(-request.getAmount());
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough points", e);
-        }
+        member.changePoint(-request.getAmount());
+
     }
 }
