@@ -80,8 +80,10 @@ public class Member {
         this.updatedAt = updatedAt;
     }
 
-    public void changePoint(Long amount)
-    {
+    public void changePoint(Long amount) {
+        if (this.point + amount < 0) {
+            throw new RuntimeException("Not enough points");
+        }
         this.point += amount;
     }
 

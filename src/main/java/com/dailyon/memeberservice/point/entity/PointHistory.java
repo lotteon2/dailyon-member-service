@@ -32,17 +32,13 @@ public class PointHistory {
 
     @Builder
     private PointHistory(
-            Long id,
             Long memberId,
-            Long amount,
             boolean status,
             PointSource source,
             String utilize,
             String createdAt
     ){
-        this.id = id;
         this.memberId = memberId;
-        this.amount = amount;
         this.status = status;
         this.source = source;
         this.utilize = utilize;

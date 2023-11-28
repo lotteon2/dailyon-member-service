@@ -1,11 +1,14 @@
 package com.dailyon.memeberservice.point.service;
 
 import com.dailyon.memeberservice.member.entity.Member;
+import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.point.api.request.PointHistoryRequest;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -16,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class PointService {
     private final PointRepository pointRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void addPoint(PointHistoryRequest request){
@@ -29,7 +33,9 @@ public class PointService {
                 .build();
 
         pointRepository.save(pointHistory);
-        changePoint(request.getAmount());
+
+        Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
+        member.changePoint(request.getAmount());
     }
 
     @Transactional
@@ -43,14 +49,13 @@ public class PointService {
                 .createdAt(createdAt)
                 .build();
 
-        pointRepository.save(pointHistory);
-        changePoint(request.getAmount());
+        Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
+        try {
+            member.changePoint(-request.getAmount());
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough points", e);
+        }
     }
 
-    @Transactional
-    public void changePoint(long amount){
-        Member member = new Member();
-        member.changePoint(amount);
 
-    }
 }
