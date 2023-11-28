@@ -5,5 +5,7 @@ public enum PointSource {
     AUCTION,
     REVIEW,
     PARTNERS,
-    CHARGE
+    CHARGE,
+
+    CANCEL
 }
