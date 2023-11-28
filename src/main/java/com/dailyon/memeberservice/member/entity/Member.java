@@ -3,6 +3,8 @@ package com.dailyon.memeberservice.member.entity;
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 
@@ -82,7 +84,7 @@ public class Member {
 
     public void changePoint(Long amount) {
         if (this.point + amount < 0) {
-            throw new RuntimeException("Not enough points");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough points");
         }
         this.point += amount;
     }

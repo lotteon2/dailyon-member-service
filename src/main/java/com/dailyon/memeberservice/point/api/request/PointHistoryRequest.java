@@ -20,6 +20,5 @@ public class PointHistoryRequest {
 
     private String utilize;
 
-    private String createdAt;
 
 }

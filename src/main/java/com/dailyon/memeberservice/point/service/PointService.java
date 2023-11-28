@@ -3,16 +3,15 @@ package com.dailyon.memeberservice.point.service;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.point.api.request.PointHistoryRequest;
+import com.dailyon.memeberservice.point.api.response.GetPointHistory;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional
@@ -22,14 +21,14 @@ public class PointService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void addPoint(PointHistoryRequest request){
-        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+    public void addPoint(PointHistoryRequest request) {
         PointHistory pointHistory = PointHistory.builder()
                 .memberId(request.getMemberId())
                 .status(false)
+                .amount(request.getAmount())
                 .source(request.getSource())
                 .utilize(request.getUtilize())
-                .createdAt(createdAt)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         pointRepository.save(pointHistory);
@@ -39,14 +38,13 @@ public class PointService {
     }
 
     @Transactional
-    public void usePoint(PointHistoryRequest request){
-        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+    public void usePoint(PointHistoryRequest request) {
         PointHistory pointHistory = PointHistory.builder()
                 .memberId(request.getMemberId())
                 .status(true)
                 .source(request.getSource())
                 .utilize(request.getUtilize())
-                .createdAt(createdAt)
+                .createdAt(LocalDateTime.now())
                 .build();
 
         pointRepository.save(pointHistory);
@@ -54,6 +52,11 @@ public class PointService {
 
         Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
         member.changePoint(-request.getAmount());
+    }
+
+    @Transactional
+    public List<PointHistory> getPointHistory(Long memberId) {
+        return pointRepository.findByMemberId(memberId);
 
     }
 }

@@ -3,11 +3,15 @@ package com.dailyon.memeberservice.point.entity;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
+
 public class PointHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,19 +31,21 @@ public class PointHistory {
 
     private String utilize;
 
-    @Column(nullable = false)
-    private String createdAt;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @Builder
     private PointHistory(
             Long memberId,
             boolean status,
+            Long amount,
             PointSource source,
             String utilize,
-            String createdAt
+            LocalDateTime createdAt
     ){
         this.memberId = memberId;
         this.status = status;
+        this.amount = amount;
         this.source = source;
         this.utilize = utilize;
         this.createdAt = createdAt;
