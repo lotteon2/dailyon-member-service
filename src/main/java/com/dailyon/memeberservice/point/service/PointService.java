@@ -49,6 +49,9 @@ public class PointService {
                 .createdAt(createdAt)
                 .build();
 
+        pointRepository.save(pointHistory);
+
+
         Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
         try {
             member.changePoint(-request.getAmount());
