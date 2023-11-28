@@ -1,5 +1,6 @@
 package com.dailyon.memeberservice.point.repository.custom;
 
+import com.dailyon.memeberservice.point.api.response.GetPointHistory;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 
 import javax.persistence.EntityManager;
@@ -11,17 +12,12 @@ public class PointHistoryRepositoryCustomImpl implements PointHistoryRepositoryC
     @PersistenceContext
     private EntityManager entityManager;
 
+
     @Override
-    public List<PointHistory> findByMemberId(Long memberId) {
-        String jpql = "SELECT p FROM PointHistory p WHERE p.memberId = :memberId";
-        TypedQuery<PointHistory> query = entityManager.createQuery(jpql, PointHistory.class);
+    public List<GetPointHistory> findByMemberId(Long memberId) {
+        String jpql = "SELECT new com.dailyon.memeberservice.point.api.response.GetPointHistory(ph.amount, ph.status, ph.source, ph.utilize, ph.createdAt) FROM PointHistory ph WHERE ph.memberId = :memberId";
+        TypedQuery<GetPointHistory> query = entityManager.createQuery(jpql, GetPointHistory.class);
         query.setParameter("memberId", memberId);
-
-        List<PointHistory> pointHistories = query.getResultList();
-
-
-        return pointHistories;
+        return query.getResultList();
     }
-
-
 }

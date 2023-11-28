@@ -29,7 +29,7 @@ public class PointApiController {
     }
 
     @GetMapping("/{id}")
-    public List<PointHistory> getPointHistory(@PathVariable Long id){
+    public List<GetPointHistory> getPointHistory(@PathVariable Long id){
         return pointService.getPointHistory(id);
     }
 }

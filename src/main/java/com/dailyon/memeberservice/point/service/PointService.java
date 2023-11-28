@@ -42,6 +42,7 @@ public class PointService {
         PointHistory pointHistory = PointHistory.builder()
                 .memberId(request.getMemberId())
                 .status(true)
+                .amount(request.getAmount())
                 .source(request.getSource())
                 .utilize(request.getUtilize())
                 .createdAt(LocalDateTime.now())
@@ -55,7 +56,7 @@ public class PointService {
     }
 
     @Transactional
-    public List<PointHistory> getPointHistory(Long memberId) {
+    public List<GetPointHistory> getPointHistory(Long memberId) {
         return pointRepository.findByMemberId(memberId);
 
     }
