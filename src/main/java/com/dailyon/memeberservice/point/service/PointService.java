@@ -28,7 +28,6 @@ public class PointService {
                 .amount(request.getAmount())
                 .source(request.getSource())
                 .utilize(request.getUtilize())
-                .createdAt(LocalDateTime.now())
                 .build();
 
         pointRepository.save(pointHistory);
@@ -45,7 +44,6 @@ public class PointService {
                 .amount(request.getAmount())
                 .source(request.getSource())
                 .utilize(request.getUtilize())
-                .createdAt(LocalDateTime.now())
                 .build();
 
         pointRepository.save(pointHistory);

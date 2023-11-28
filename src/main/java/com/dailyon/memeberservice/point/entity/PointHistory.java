@@ -4,6 +4,7 @@ import com.dailyon.memeberservice.point.api.request.PointSource;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-
+@EntityListeners(AuditingEntityListener.class)
 public class PointHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +33,7 @@ public class PointHistory {
     private String utilize;
 
     @CreatedDate
+    @Column(nullable = false, columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
 
     @Builder
