@@ -20,7 +20,7 @@ public class PointApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<GetPointHistory>> getPointHistory(@PathVariable Long id){
-       return ResponseEntity.status(HttpStatus.OK).body(pointService.getPointHistory(id));
+    public ResponseEntity<List<GetPointHistory>> getPointHistory(@RequestHeader(name = "memberId") Long memberId){
+       return ResponseEntity.status(HttpStatus.OK).body(pointService.getPointHistory(memberId));
     }
 }

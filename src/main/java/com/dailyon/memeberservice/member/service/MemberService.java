@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,15 +24,15 @@ public class MemberService {
                 .orElse("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Fkr%2Ffree-icon%2Fgithub-logo_25231&psig=AOvVaw0pcr5--c2h4nyBbrQ9pzPb&ust=1700566691294000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCICL2t--0oIDFQAAAAAdAAAAABAD");
         String gender = Optional.ofNullable(request.getGender())
                 .orElse("");
-        String code = UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
                 .email(request.getEmail())
+                .nickname(request.getNickname())
                 .profileImgUrl(profileImgUrl)
                 .gender(gender)
                 .birth(request.getBirth())
-
-                .code(code)
+                .code(uuid)
                 .point(0L)
                 .isDelted(false)
                 .build();
@@ -64,6 +62,8 @@ public class MemberService {
     public Long modifyMember(MemberModifyRequest request, Long id){
         Member member = memberRepository.findById(id).orElseThrow();
 
+        String nickname = Optional.ofNullable(request.getNickname())
+                .orElse(member.getNickname());
         String profileImgUrl = Optional.ofNullable(request.getProfileImgUrl())
                 .orElse(member.getProfileImgUrl());
         String gender = Optional.ofNullable(request.getGender())
@@ -72,6 +72,7 @@ public class MemberService {
                 .orElse(member.getBirth());
 
         member.changeMember(
+                nickname,
                 profileImgUrl,
                 birth,
                 gender

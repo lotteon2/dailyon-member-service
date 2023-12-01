@@ -14,6 +14,9 @@ public class MemberModifyRequest{
     @NotNull(message = "profileImgUrl null error")
     private String profileImgUrl;
 
+    @NotNull(message = "nickname null error")
+    private String nickname;
+
     @NotNull(message = "gender null error")
     private String gender;
 

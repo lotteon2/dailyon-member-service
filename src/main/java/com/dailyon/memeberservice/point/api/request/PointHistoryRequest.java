@@ -10,13 +10,10 @@ import javax.persistence.*;
 @Setter
 public class PointHistoryRequest {
 
-    private long memberId;
-
     private PointSource source;
 
     private long amount;
 
     private String utilize;
-
 
 }
