@@ -24,6 +24,9 @@ public class Member {
     private String email;
 
     @Column(nullable = false)
+    private String nickname;
+
+    @Column(nullable = false)
     private String profileImgUrl;
 
     private String gender;
@@ -56,6 +59,7 @@ public class Member {
     private Member (
         Long id,
         String email,
+        String nickname,
         String profileImgUrl,
         String gender,
         String birth,
@@ -64,6 +68,7 @@ public class Member {
         LocalDateTime createdAt,
         boolean isDelted) {
         this.id = id;
+        this.nickname = nickname;
         this.email = email;
         this.profileImgUrl = profileImgUrl;
         this.gender = gender;
@@ -77,10 +82,12 @@ public class Member {
 
     public void changeMember (
             String profileImgUrl,
+            String nickname,
             String birth,
             String gender
     ) {
         this.email = email;
+        this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
         this.gender = gender;
         this.birth = birth;

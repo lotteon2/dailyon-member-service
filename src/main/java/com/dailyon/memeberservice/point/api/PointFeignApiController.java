@@ -21,13 +21,13 @@ public class PointFeignApiController {
     }
 
     @PostMapping("/use")
-    public ResponseEntity<Object>usePoint(@RequestBody PointHistoryRequest request){
-        pointService.usePoint(request);
+    public ResponseEntity<Object>usePoint(@RequestHeader(name = "memberId") Long memberId, @RequestBody PointHistoryRequest request){
+        pointService.usePoint(memberId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     @PostMapping("/add")
-    public ResponseEntity<Object> addPoint(@RequestBody PointHistoryRequest request){
-        pointService.addPoint(request);
+    public ResponseEntity<Object> addPoint(@RequestHeader(name = "memberId") Long memberId, @RequestBody PointHistoryRequest request){
+        pointService.addPoint(memberId, request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

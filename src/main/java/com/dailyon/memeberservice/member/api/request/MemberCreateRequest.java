@@ -13,10 +13,13 @@ public class MemberCreateRequest {
 
     private String email;
 
+    private String nickname;
+
     private String profileImgUrl;
 
     private String gender;
 
     private String birth;
+
 
 }

@@ -21,9 +21,9 @@ public class PointService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void addPoint(PointHistoryRequest request) {
+    public void addPoint(Long memberId, PointHistoryRequest request) {
         PointHistory pointHistory = PointHistory.builder()
-                .memberId(request.getMemberId())
+                .memberId(memberId)
                 .status(false)
                 .amount(request.getAmount())
                 .source(request.getSource())
@@ -32,14 +32,14 @@ public class PointService {
 
         pointRepository.save(pointHistory);
 
-        Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow();
         member.changePoint(request.getAmount());
     }
 
     @Transactional
-    public void usePoint(PointHistoryRequest request) {
+    public void usePoint(Long memberId, PointHistoryRequest request) {
         PointHistory pointHistory = PointHistory.builder()
-                .memberId(request.getMemberId())
+                .memberId(memberId)
                 .status(true)
                 .amount(request.getAmount())
                 .source(request.getSource())
@@ -49,7 +49,7 @@ public class PointService {
         pointRepository.save(pointHistory);
 
 
-        Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow();
         member.changePoint(-request.getAmount());
     }
 
