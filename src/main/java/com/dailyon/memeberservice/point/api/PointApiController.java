@@ -19,7 +19,7 @@ public class PointApiController {
         this.pointService = pointService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("")
     public ResponseEntity<List<GetPointHistory>> getPointHistory(@RequestHeader(name = "memberId") Long memberId){
        return ResponseEntity.status(HttpStatus.OK).body(pointService.getPointHistory(memberId));
     }
