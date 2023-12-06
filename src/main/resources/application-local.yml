@@ -28,8 +28,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  cloud:
-    discovery:
 eureka:
   client:
     register-with-eureka: true
