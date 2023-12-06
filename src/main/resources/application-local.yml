@@ -30,7 +30,6 @@ spring:
         format_sql: true
   cloud:
     discovery:
-      enabled: false
 eureka:
   client:
     register-with-eureka: true

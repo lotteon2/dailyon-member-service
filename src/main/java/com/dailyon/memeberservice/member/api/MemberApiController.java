@@ -23,9 +23,9 @@ public class MemberApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.registerMember(request));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MemberGetResponse> getMember(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.getMember(id));
+    @GetMapping("")
+    public ResponseEntity<MemberGetResponse> getMember(@RequestHeader Long memberId) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.getMember(memberId));
     }
 
     @GetMapping("/check/{email}")
@@ -33,13 +33,13 @@ public class MemberApiController {
         return memberService.MemberDuplicateCheck(email);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Long> modifyMember(@RequestBody MemberModifyRequest request, @PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.modifyMember(request, id));
+    @PutMapping("")
+    public ResponseEntity<Long> modifyMember(@RequestBody MemberModifyRequest request, @RequestHeader Long memberId){
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.modifyMember(request, memberId));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteMember(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.softDelete(id));
+    @DeleteMapping("")
+    public ResponseEntity<Long> deleteMember(@RequestHeader Long memberId){
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.softDelete(memberId));
     }
 }
