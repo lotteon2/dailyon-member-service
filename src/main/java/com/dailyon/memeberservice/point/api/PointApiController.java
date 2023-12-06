@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/point")
+@RequestMapping("/points")
 @CrossOrigin(origins = "*")
 public class PointApiController {
 

@@ -9,6 +9,8 @@ public class MemberGetResponse {
 
     private String email;
 
+    private String nickname;
+
     private String profileImgUrl;
 
     private String gender;

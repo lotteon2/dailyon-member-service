@@ -1,6 +1,8 @@
 server:
-  port: 8081
+  port: 8080
 spring:
+  application:
+    name: member-service
   config:
     activate:
       on-profile: local
@@ -26,9 +28,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  cloud:
-    discovery:
-      enabled: false
 eureka:
   client:
     register-with-eureka: true
