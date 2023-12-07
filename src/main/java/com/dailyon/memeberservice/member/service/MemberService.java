@@ -91,5 +91,8 @@ public class MemberService {
     }
 
 
-
+    public Long getPoints(Long memberId) {
+        Long point = memberRepository.findPointsById(memberId);
+        return point;
+    }
 }

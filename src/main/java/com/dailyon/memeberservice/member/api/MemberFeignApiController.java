@@ -22,4 +22,9 @@ public class MemberFeignApiController {
     public ResponseEntity<Long> registerMember(@RequestBody MemberCreateRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.registerMember(request));
     }
+
+    @GetMapping("/points")
+    public ResponseEntity<Long> getPoints(@RequestHeader Long memberId){
+        return ResponseEntity.status(HttpStatus.OK).body(memberService.getPoints(memberId));
+    }
 }
