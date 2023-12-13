@@ -1,5 +1,6 @@
 package com.dailyon.memeberservice.address.entity;
 
+import com.dailyon.memeberservice.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,26 +18,27 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long member_id;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member memberId;
 
     @Column(nullable = false)
-    private boolean is_default;
+    private boolean isDefault;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String detail_address;
+    private String detailAddress;
 
     @Column(nullable = false)
-    private String road_address;
+    private String roadAddress;
 
     @Column(nullable = false)
-    private String post_code;
+    private String postCode;
 
     @Column(nullable = false)
-    private String phone_number;
+    private String phoneNumber;
 
 
     @Column(nullable = false, columnDefinition = "timestamp default now()")
@@ -53,17 +55,17 @@ public class Address {
     }
 
     @Builder
-    public Address(Long id, Long member_id, boolean is_default, String name,
-                   String detail_address, String road_address, String post_code,
-                   String phone_number, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Address(Long id, Member memberId, boolean isDefault, String name,
+                   String detailAddress, String roadAddress, String postCode,
+                   String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.member_id = member_id;
-        this.is_default = is_default;
+        this.memberId = memberId;
+        this.isDefault = isDefault;
         this.name = name;
-        this.detail_address = detail_address;
-        this.road_address = road_address;
-        this.post_code = post_code;
-        this.phone_number = phone_number;
+        this.detailAddress = detailAddress;
+        this.roadAddress = roadAddress;
+        this.postCode = postCode;
+        this.phoneNumber = phoneNumber;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

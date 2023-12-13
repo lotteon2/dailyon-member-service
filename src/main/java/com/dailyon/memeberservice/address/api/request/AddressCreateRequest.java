@@ -15,24 +15,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AddressCreateRequest {
 
-    private Long id;
-
-    private Long member_id;
-
-    private boolean is_default;
+    private boolean isDefault;
 
     private String name;
 
-    private String detail_address;
+    private String detailAddress;
 
-    private String road_address;
+    private String roadAddress;
 
-    private String post_code;
+    private String postCode;
 
-    private String phone_number;
-
-    private LocalDateTime  createdAt;
-
-    private LocalDateTime updatedAt;
+    private String phoneNumber;
 
 }
