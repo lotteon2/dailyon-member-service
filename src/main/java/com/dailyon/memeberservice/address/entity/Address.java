@@ -18,9 +18,9 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member memberId;
+    private Member member;
 
     @Column(nullable = false)
     private boolean isDefault;
@@ -55,11 +55,11 @@ public class Address {
     }
 
     @Builder
-    public Address(Long id, Member memberId, boolean isDefault, String name,
+    public Address(Long id, Member member, boolean isDefault, String name,
                    String detailAddress, String roadAddress, String postCode,
                    String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.memberId = memberId;
+        this.member = member;
         this.isDefault = isDefault;
         this.name = name;
         this.detailAddress = detailAddress;

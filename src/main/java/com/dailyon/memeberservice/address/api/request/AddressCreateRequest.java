@@ -1,4 +1,4 @@
-package com.dailyon.memeberservice.address.entity;
+package com.dailyon.memeberservice.address.api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

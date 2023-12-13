@@ -1,7 +1,7 @@
 package com.dailyon.memeberservice.address.api;
 
 import com.dailyon.memeberservice.address.entity.Address;
-import com.dailyon.memeberservice.address.entity.AddressCreateRequest;
+import com.dailyon.memeberservice.address.api.request.AddressCreateRequest;
 import com.dailyon.memeberservice.address.service.AddressService;
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
