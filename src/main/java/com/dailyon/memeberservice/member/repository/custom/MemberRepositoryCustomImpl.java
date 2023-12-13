@@ -10,7 +10,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
 
     @Override
     public boolean findByEmail(String email) {
-        Long count = entityManager.createQuery("SELECT COUNT(m) FROM Member m WHERE m.email = :email", Long.class)
+        Long count = entityManager.createQuery("SELECT COUNT(m) FROM Address m WHERE m.email = :email", Long.class)
                 .setParameter("email", email)
                 .getSingleResult();
 
@@ -19,7 +19,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
 
     @Override
     public Long findPointsById(Long memberId) {
-        Long points = entityManager.createQuery("SELECT point FROM Member WHERE id = :memberId", Long.class)
+        Long points = entityManager.createQuery("SELECT point FROM Address WHERE id = :memberId", Long.class)
                 .setParameter("memberId", memberId)
                 .getSingleResult();
         return points;
