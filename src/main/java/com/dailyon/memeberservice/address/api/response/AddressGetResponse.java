@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddressGetResponse {
 
-    private boolean isDefault;
+    private Boolean isDefault;
 
     private String name;
 

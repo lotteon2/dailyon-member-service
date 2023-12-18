@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,9 +28,20 @@ public class AddressService {
     public List<AddressGetResponse> getMemberAddress (Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
-        List<AddressGetResponse> addresses = addressRepository.findByMemberId(memberId);
+        List<Address> addresses = addressRepository.findByMemberId(memberId);
 
-        return addresses;
+        List<AddressGetResponse> addressResponses = addresses.stream()
+                .map(address -> new AddressGetResponse(
+                        address.getIsDefault(),
+                        address.getName(),
+                        address.getDetailAddress(),
+                        address.getRoadAddress(),
+                        address.getPostCode(),
+                        address.getPhoneNumber()
+                ))
+                .collect(Collectors.toList());
+
+        return addressResponses;
 
     }
 
