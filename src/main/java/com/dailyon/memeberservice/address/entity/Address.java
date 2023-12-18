@@ -23,7 +23,7 @@ public class Address {
     private Member member;
 
     @Column(nullable = false)
-    private boolean isDefault;
+    private Boolean isDefault;
 
     @Column(nullable = false)
     private String name;
@@ -55,7 +55,7 @@ public class Address {
     }
 
     @Builder
-    public Address(Long id, Member member, boolean isDefault, String name,
+    public Address(Long id, Member member, Boolean isDefault, String name,
                    String detailAddress, String roadAddress, String postCode,
                    String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
