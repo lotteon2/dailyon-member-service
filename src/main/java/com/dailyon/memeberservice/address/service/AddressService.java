@@ -17,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-@Slf4j
 public class AddressService {
 
     private final AddressRepository addressRepository;
@@ -38,10 +37,6 @@ public class AddressService {
     @Transactional
     public Long createAddress(AddressCreateRequest request, Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
-        log.info("############## ", request.getIsDefault());
-        log.info("#@@@@@@@@@@@@@@@@@@@@", request);
-
-        log.info("#@@@@$#$#$", String.valueOf(request));
 
         Address address = Address.builder()
                         .member(member)
