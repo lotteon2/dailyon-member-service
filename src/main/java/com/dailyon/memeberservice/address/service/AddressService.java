@@ -32,6 +32,7 @@ public class AddressService {
 
         List<AddressGetResponse> addressResponses = addresses.stream()
                 .map(address -> new AddressGetResponse(
+                        address.getId(),
                         address.getIsDefault(),
                         address.getName(),
                         address.getDetailAddress(),
@@ -42,7 +43,6 @@ public class AddressService {
                 .collect(Collectors.toList());
 
         return addressResponses;
-
     }
 
 
