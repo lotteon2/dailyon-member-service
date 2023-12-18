@@ -8,11 +8,12 @@ import com.dailyon.memeberservice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -39,7 +40,7 @@ public class MemberService {
 
         return member.getId();
     }
-    @Transactional
+
     public MemberGetResponse getMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow();
         MemberGetResponse response = new MemberGetResponse();
@@ -52,7 +53,7 @@ public class MemberService {
 
         return response;
     }
-    @Transactional
+
     public boolean MemberDuplicateCheck(String email){
         return memberRepository.findByEmail(email);
     }
@@ -89,7 +90,6 @@ public class MemberService {
         return id;
     }
 
-    @Transactional
     public Long getPoints(Long memberId) {
         Long point = memberRepository.findPointsById(memberId);
         return point;

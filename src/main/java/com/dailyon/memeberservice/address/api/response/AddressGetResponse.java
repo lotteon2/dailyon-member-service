@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressGetRequest {
+public class AddressGetResponse {
 
     private boolean isDefault;
 

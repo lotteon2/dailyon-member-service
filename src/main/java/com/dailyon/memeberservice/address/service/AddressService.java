@@ -1,6 +1,6 @@
 package com.dailyon.memeberservice.address.service;
 
-import com.dailyon.memeberservice.address.api.response.AddressGetRequest;
+import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.address.entity.Address;
 import com.dailyon.memeberservice.address.api.request.AddressCreateRequest;
 import com.dailyon.memeberservice.address.repository.AddressRepository;
@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 @Service
 public class AddressService {
 
@@ -21,13 +22,13 @@ public class AddressService {
     private final MemberRepository memberRepository;
 
 
-    @Transactional
-    public ResponseEntity<List<AddressGetRequest>> getMemberAddress (Long memberId){
+
+    public List<AddressGetResponse> getMemberAddress (Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
-        List<AddressGetRequest> addresses = addressRepository.findByMemberId(memberId);
+        List<AddressGetResponse> addresses = addressRepository.findByMemberId(memberId);
 
-        return ResponseEntity.ok(addresses);
+        return addresses;
 
     }
 

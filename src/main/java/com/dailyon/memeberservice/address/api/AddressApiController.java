@@ -1,7 +1,6 @@
 package com.dailyon.memeberservice.address.api;
 
-import com.dailyon.memeberservice.address.api.response.AddressGetRequest;
-import com.dailyon.memeberservice.address.entity.Address;
+import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.address.api.request.AddressCreateRequest;
 import com.dailyon.memeberservice.address.service.AddressService;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,7 @@ public class AddressApiController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseEntity<List<AddressGetRequest>>> getMemberAddress(@RequestHeader Long memberId ){
+    public ResponseEntity<List<AddressGetResponse>> getMemberAddress(@RequestHeader Long memberId ){
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.getMemberAddress(memberId));
     }
 }
