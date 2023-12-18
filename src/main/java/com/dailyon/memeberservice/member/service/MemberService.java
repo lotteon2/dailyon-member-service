@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -40,7 +39,7 @@ public class MemberService {
 
         return member.getId();
     }
-
+    @Transactional
     public MemberGetResponse getMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow();
         MemberGetResponse response = new MemberGetResponse();
@@ -53,7 +52,7 @@ public class MemberService {
 
         return response;
     }
-
+    @Transactional
     public boolean MemberDuplicateCheck(String email){
         return memberRepository.findByEmail(email);
     }
@@ -90,7 +89,7 @@ public class MemberService {
         return id;
     }
 
-
+    @Transactional
     public Long getPoints(Long memberId) {
         Long point = memberRepository.findPointsById(memberId);
         return point;
