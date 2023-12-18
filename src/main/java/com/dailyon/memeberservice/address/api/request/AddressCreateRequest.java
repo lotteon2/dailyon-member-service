@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AddressCreateRequest {
 
-    private boolean isDefault;
+    private Boolean isDefault;
 
     private String name;
 

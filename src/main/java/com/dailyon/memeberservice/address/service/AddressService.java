@@ -7,6 +7,7 @@ import com.dailyon.memeberservice.address.repository.AddressRepository;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,7 @@ public class AddressService {
 
         Address address = Address.builder()
                         .member(member)
-                        .isDefault(request.isDefault())
+                        .isDefault(request.getIsDefault())
                         .name((request.getName()))
                         .detailAddress(request.getDetailAddress())
                         .roadAddress(request.getRoadAddress())
