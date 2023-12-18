@@ -8,12 +8,12 @@ import com.dailyon.memeberservice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -89,7 +89,6 @@ public class MemberService {
 
         return id;
     }
-
 
     public Long getPoints(Long memberId) {
         Long point = memberRepository.findPointsById(memberId);
