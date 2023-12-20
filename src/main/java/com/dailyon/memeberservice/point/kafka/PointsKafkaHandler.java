@@ -1,7 +1,5 @@
 package com.dailyon.memeberservice.point.kafka;
 
-
-import com.dailyon.memeberservice.common.InsufficientPointException;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
