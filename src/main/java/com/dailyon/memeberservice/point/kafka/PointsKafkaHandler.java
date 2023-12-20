@@ -80,6 +80,9 @@ public class PointsKafkaHandler {
                     pointService.rollbackUsePoints(orderDto);
                     ack.acknowledge();
                 }
+                else {
+                    ack.acknowledge();
+                }
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             } catch(Exception e ) {
