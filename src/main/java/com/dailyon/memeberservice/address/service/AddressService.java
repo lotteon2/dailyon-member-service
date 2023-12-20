@@ -15,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -44,6 +48,29 @@ public class AddressService {
 
         return addressResponses;
     }
+
+
+
+
+    @Transactional
+    public Page<AddressGetResponse> getMemberAddressTest(Long memberId, Pageable pageable){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+
+        Page<Address> addresses = addressRepository.findByMemberId(memberId, pageable);
+
+        Page<AddressGetResponse> addressResponses = addresses.map(address -> new AddressGetResponse(
+                address.getId(),
+                address.getIsDefault(),
+                address.getName(),
+                address.getDetailAddress(),
+                address.getRoadAddress(),
+                address.getPostCode(),
+                address.getPhoneNumber()
+        ));
+
+        return addressResponses;
+    }
+
 
 
     @Transactional
