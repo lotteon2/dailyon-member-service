@@ -78,11 +78,8 @@ public class PointsKafkaHandler {
 
                 if (OrderEvent.PAYMENT_FAIL.equals(orderDto.getOrderEvent())) {
                     pointService.rollbackUsePoints(orderDto);
-                    ack.acknowledge();
                 }
-                else {
-                    ack.acknowledge();
-                }
+                ack.acknowledge();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             } catch(Exception e ) {
