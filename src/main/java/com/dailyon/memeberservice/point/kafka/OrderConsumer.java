@@ -1,6 +1,6 @@
 package com.dailyon.memeberservice.point.kafka;
 
-import com.dailyon.memeberservice.common.exception.InsufficientQuantityException;
+
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
@@ -39,10 +39,9 @@ public class OrderConsumer {
                         .build();
 
             pointService.usePointKafka(pointHistory);
-
-        } catch (InsufficientQuantityException e) {
+            ack.acknowledge();
+        }  catch (JsonProcessingException e) {
             rollbackTransaction(orderDto);
-        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }
@@ -62,9 +61,8 @@ public class OrderConsumer {
                         .build();
 
                 pointService.addPointKafka(pointHistory);
-            } catch (InsufficientQuantityException e) {
-                e.printStackTrace();
-            } catch (JsonProcessingException e) {
+                ack.acknowledge();
+            }  catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
@@ -75,11 +73,10 @@ public class OrderConsumer {
             try {
                 orderDto = objectMapper.readValue(message, OrderDto.class);
 
-                if ("PAYMENT_FAIL".equals(orderDto.getOrderEvent())) {
+                if (OrderEvent.PAYMENT_FAIL.equals(orderDto.getOrderEvent())) {
                     pointService.rollbackUsePoints(orderDto);
+                    ack.acknowledge();
                 }
-            } catch (InsufficientQuantityException e) {
-                e.printStackTrace();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

@@ -11,7 +11,7 @@ import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
 import com.dailyon.memeberservice.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.dailyon.memeberservice.common.exception.InsufficientQuantityException;
+
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -62,7 +62,11 @@ public class PointService {
         pointRepository.save(request);
         Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
         if (member.getPoint() < request.getAmount()) {
-            throw new InsufficientQuantityException("Insufficient points for member: " + member.getId());
+            try {
+                throw new Exception("Insufficient points for member: " + member.getId());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         member.changePoint(-request.getAmount());
     }
