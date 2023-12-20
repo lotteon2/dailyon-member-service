@@ -17,7 +17,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 @Component
 @RequiredArgsConstructor
-public class OrderConsumer {
+public class PointsKafkaHandler {
     private final PointService pointService;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
