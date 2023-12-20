@@ -26,13 +26,8 @@ public class AddressApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.createAddress(request, memberId));
     }
 
-    @GetMapping
-    public ResponseEntity<List<AddressGetResponse>> getMemberAddress(@RequestHeader Long memberId ){
-        return ResponseEntity.status(HttpStatus.OK).body(addressService.getMemberAddress(memberId));
-    }
-
-    @GetMapping("/test")
+    @GetMapping("")
     public ResponseEntity<Page<AddressGetResponse>> getMemberAddressTest(@RequestHeader Long memberId, Pageable pageable ){
-        return ResponseEntity.status(HttpStatus.OK).body(addressService.getMemberAddressTest(memberId, pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(addressService.getMemberAddress(memberId, pageable));
     }
 }

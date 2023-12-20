@@ -29,31 +29,8 @@ public class AddressService {
 
 
 
-    public List<AddressGetResponse> getMemberAddress (Long memberId){
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
-
-        List<Address> addresses = addressRepository.findByMemberId(memberId);
-
-        List<AddressGetResponse> addressResponses = addresses.stream()
-                .map(address -> new AddressGetResponse(
-                        address.getId(),
-                        address.getIsDefault(),
-                        address.getName(),
-                        address.getDetailAddress(),
-                        address.getRoadAddress(),
-                        address.getPostCode(),
-                        address.getPhoneNumber()
-                ))
-                .collect(Collectors.toList());
-
-        return addressResponses;
-    }
-
-
-
-
     @Transactional
-    public Page<AddressGetResponse> getMemberAddressTest(Long memberId, Pageable pageable){
+    public Page<AddressGetResponse> getMemberAddress(Long memberId, Pageable pageable){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
         Page<Address> addresses = addressRepository.findByMemberId(memberId, pageable);
