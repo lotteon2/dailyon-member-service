@@ -1,5 +1,6 @@
 package com.dailyon.memeberservice.point.service;
 
+import com.dailyon.memeberservice.common.InsufficientPointException;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.member.service.MemberService;
@@ -63,7 +64,7 @@ public class PointService {
         Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
         if (member.getPoint() < request.getAmount()) {
             try {
-                throw new Exception("Insufficient points for member: " + member.getId());
+                throw new InsufficientPointException("Insufficient points for member: " + member.getId());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
