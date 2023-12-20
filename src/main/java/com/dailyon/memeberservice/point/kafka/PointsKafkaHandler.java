@@ -41,11 +41,10 @@ public class PointsKafkaHandler {
 
             pointService.usePointKafka(pointHistory);
             ack.acknowledge();
-        } catch (InsufficientPointException e) {
-            rollbackTransaction(orderDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            rollbackTransaction(orderDto);
             e.printStackTrace();
         }
     }
