@@ -7,6 +7,9 @@ spring:
   application:
     name: member-service
   # config service settings
+  kafka:
+    consumer:
+      group-id: test
   cloud:
     config:
       name: member-service
