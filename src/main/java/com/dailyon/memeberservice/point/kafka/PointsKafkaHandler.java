@@ -41,8 +41,9 @@ public class PointsKafkaHandler {
             pointService.usePointKafka(pointHistory);
             ack.acknowledge();
         }  catch (JsonProcessingException e) {
-            rollbackTransaction(orderDto);
             e.printStackTrace();
+        } catch(Exception e ) {
+            rollbackTransaction(orderDto);
         }
     }
 
@@ -64,11 +65,13 @@ public class PointsKafkaHandler {
                 ack.acknowledge();
             }  catch (JsonProcessingException e) {
                 e.printStackTrace();
+            }   catch(Exception e ) {
+                e.printStackTrace();
             }
         }
 
         @KafkaListener(topics = "cancle-order")
-        public void ddPoints(String message, Acknowledgment ack) {
+        public void cancelPoints(String message, Acknowledgment ack) {
             OrderDto orderDto = null;
             try {
                 orderDto = objectMapper.readValue(message, OrderDto.class);
@@ -79,6 +82,8 @@ public class PointsKafkaHandler {
                 }
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
+            } catch(Exception e ) {
+                e.printStackTrace();
             }
         }
 
@@ -88,6 +93,8 @@ public class PointsKafkaHandler {
             orderDto.setOrderEvent(OrderEvent.POINT_FAIL);
             kafkaTemplate.send("order-cancel", objectMapper.writeValueAsString(orderDto));
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch(Exception e ) {
             e.printStackTrace();
         }
     }
