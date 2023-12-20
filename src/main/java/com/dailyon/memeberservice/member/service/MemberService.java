@@ -45,6 +45,7 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow();
         MemberGetResponse response = new MemberGetResponse();
 
+        response.setNickname(member.getNickname());
         response.setEmail(member.getEmail());
         response.setProfileImgUrl(member.getProfileImgUrl());
         response.setBirth(member.getBirth());
