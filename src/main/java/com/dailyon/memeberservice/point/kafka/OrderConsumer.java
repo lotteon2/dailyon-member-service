@@ -69,10 +69,20 @@ public class OrderConsumer {
             }
         }
 
-        //TODO : 캔슬 필터링 적용해서 받아야함
         @KafkaListener(topics = "cancle-order")
-        public void ddPoints (String message, Acknowledgment ack){
+        public void ddPoints(String message, Acknowledgment ack) {
+            OrderDto orderDto = null;
+            try {
+                orderDto = objectMapper.readValue(message, OrderDto.class);
 
+                if ("PAYMENT_FAIL".equals(orderDto.getOrderEvent())) {
+                    pointService.rollbackUsePoints(orderDto);
+                }
+            } catch (InsufficientQuantityException e) {
+                e.printStackTrace();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
 
 
