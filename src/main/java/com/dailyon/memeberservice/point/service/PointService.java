@@ -2,12 +2,14 @@ package com.dailyon.memeberservice.point.service;
 
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
+import com.dailyon.memeberservice.member.service.MemberService;
 import com.dailyon.memeberservice.point.api.request.PointHistoryRequest;
 import com.dailyon.memeberservice.point.api.response.GetPointHistory;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.dailyon.memeberservice.common.exception.InsufficientQuantityException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -51,6 +53,25 @@ public class PointService {
 
         Member member = memberRepository.findById(memberId).orElseThrow();
         member.changePoint(-request.getAmount());
+    }
+
+    @Transactional
+    public void usePointKafka(PointHistory request) {
+        pointRepository.save(request);
+        Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
+        if (member.getPoint() < request.getAmount()) {
+            throw new InsufficientQuantityException("Insufficient points for member: " + member.getId());
+        }
+        member.changePoint(-request.getAmount());
+    }
+
+
+    @Transactional
+    public void addPointKafka(PointHistory pointHistory ) {
+        pointRepository.save(pointHistory);
+
+        Member member = memberRepository.findById(pointHistory.getId()).orElseThrow();
+        member.changePoint(pointHistory.getAmount());
     }
 
     @Transactional

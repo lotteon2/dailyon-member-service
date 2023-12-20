@@ -19,7 +19,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 @RequiredArgsConstructor
 public class OrderConsumer {
     private final PointService pointService;
-    //private final CancelOrderProducer cancelOrderProducer;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
@@ -46,7 +45,6 @@ public class OrderConsumer {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
     }
 
         @KafkaListener(topics = "create-review")
@@ -71,11 +69,11 @@ public class OrderConsumer {
             }
         }
 
+        //TODO : 캔슬 필터링 적용해서 받아야함
         @KafkaListener(topics = "cancle-order")
         public void ddPoints (String message, Acknowledgment ack){
 
         }
-
 
 
     public void rollbackTransaction(OrderDto orderDto) {
