@@ -106,7 +106,7 @@ public class PointsKafkaHandler {
     public void producePointSuccessMessage(OrderDto orderDto){
        try{
            String data = objectMapper.writeValueAsString(orderDto);
-           kafkaTemplate.send("create-order-use-point", data);
+           kafkaTemplate.send("use-member-points", data);
        } catch (Exception e) {
            e.printStackTrace();
        }
