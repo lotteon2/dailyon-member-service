@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class MemberGetResponse {
 
+    private Long memberId;
+
     private String email;
 
     private String nickname;
