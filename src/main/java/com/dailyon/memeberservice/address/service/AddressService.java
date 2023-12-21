@@ -15,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -24,26 +28,24 @@ public class AddressService {
     private final MemberRepository memberRepository;
 
 
-
-    public List<AddressGetResponse> getMemberAddress (Long memberId){
+    public Page<AddressGetResponse> getMemberAddress(Long memberId, Pageable pageable){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
-        List<Address> addresses = addressRepository.findByMemberId(memberId);
+        Page<Address> addresses = addressRepository.findByMemberId(memberId, pageable);
 
-        List<AddressGetResponse> addressResponses = addresses.stream()
-                .map(address -> new AddressGetResponse(
-                        address.getId(),
-                        address.getIsDefault(),
-                        address.getName(),
-                        address.getDetailAddress(),
-                        address.getRoadAddress(),
-                        address.getPostCode(),
-                        address.getPhoneNumber()
-                ))
-                .collect(Collectors.toList());
+        Page<AddressGetResponse> addressResponses = addresses.map(address -> new AddressGetResponse(
+                address.getId(),
+                address.getIsDefault(),
+                address.getName(),
+                address.getDetailAddress(),
+                address.getRoadAddress(),
+                address.getPostCode(),
+                address.getPhoneNumber()
+        ));
 
         return addressResponses;
     }
+
 
 
     @Transactional

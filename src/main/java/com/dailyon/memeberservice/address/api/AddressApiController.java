@@ -3,11 +3,11 @@ package com.dailyon.memeberservice.address.api;
 import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.address.api.request.AddressCreateRequest;
 import com.dailyon.memeberservice.address.service.AddressService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/addresses")
@@ -24,8 +24,8 @@ public class AddressApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(addressService.createAddress(request, memberId));
     }
 
-    @GetMapping
-    public ResponseEntity<List<AddressGetResponse>> getMemberAddress(@RequestHeader Long memberId ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(addressService.getMemberAddress(memberId));
+    @GetMapping("")
+    public ResponseEntity<Page<AddressGetResponse>> getMemberAddress(@RequestHeader Long memberId, Pageable pageable ){
+        return ResponseEntity.status(HttpStatus.OK).body(addressService.getMemberAddress(memberId, pageable));
     }
 }
