@@ -3,7 +3,7 @@ package com.dailyon.memeberservice.point.kafka;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
 import com.dailyon.memeberservice.point.service.PointService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,6 +63,7 @@ public class PointsKafkaHandler {
                         .build();
 
                 pointService.addPointKafka(pointHistory);
+                producePointSuccessMessage(orderDto);
             }  catch (JsonProcessingException e) {
                 e.printStackTrace();
             }   catch(Exception e ) {
@@ -72,7 +73,7 @@ public class PointsKafkaHandler {
             }
         }
 
-        @KafkaListener(topics = "cancle-order")
+        @KafkaListener(topics = "cancel-order")
         public void cancelPoints(String message, Acknowledgment ack) {
             OrderDto orderDto = null;
             try {
@@ -100,5 +101,15 @@ public class PointsKafkaHandler {
         } catch(Exception e ) {
             e.printStackTrace();
         }
+    }
+
+    public void producePointSuccessMessage(OrderDto orderDto){
+       try{
+           String data = objectMapper.writeValueAsString(orderDto);
+           kafkaTemplate.send("use-member-points", data);
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+
     }
 }
