@@ -88,19 +88,9 @@ public class AddressService {
     public Long setDefaultAddress(Long memberId, Long addressId){
         List<Address> addresses = addressRepository.findByMemberId(memberId);
 
-        Optional<Address> selectAddress = addresses.stream()
-                .filter(address -> address.getId().equals(addressId))
-                .findFirst();
-
-        Address selectedAddress = selectAddress.get();
-
-        for (Address address : addresses) {
-            address.setIsDefault(false);
+        for(Address address: addresses) {
+            address.setIsDefault(address.getId().equals(addressId));
         }
-
-        selectedAddress.setIsDefault(true);
-
-        addressRepository.saveAll(addresses);
 
         return addressId;
     }
