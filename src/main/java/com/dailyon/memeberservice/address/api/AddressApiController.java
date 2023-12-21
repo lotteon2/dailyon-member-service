@@ -2,6 +2,7 @@ package com.dailyon.memeberservice.address.api;
 
 import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.address.api.request.AddressCreateRequest;
+import com.dailyon.memeberservice.address.entity.Address;
 import com.dailyon.memeberservice.address.service.AddressService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,5 +28,15 @@ public class AddressApiController {
     @GetMapping("")
     public ResponseEntity<Page<AddressGetResponse>> getMemberAddress(@RequestHeader Long memberId, Pageable pageable ){
         return ResponseEntity.status(HttpStatus.OK).body(addressService.getMemberAddress(memberId, pageable));
+    }
+
+    @PostMapping("/default")
+    public ResponseEntity<Long> setDefaultAddress(@RequestHeader Long memberId,@RequestBody Long addressId ){
+        return ResponseEntity.status(HttpStatus.OK).body(addressService.setDefaultAddress(memberId, addressId));
+    }
+
+    @GetMapping("/default")
+    public ResponseEntity<AddressGetResponse> getDefaultAddress(@RequestHeader Long memberId ){
+        return ResponseEntity.status(HttpStatus.OK).body(addressService.getDefaultAddress(memberId));
     }
 }
