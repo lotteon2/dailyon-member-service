@@ -38,12 +38,13 @@ public class PointsKafkaHandler {
                         .build();
 
             pointService.usePointKafka(pointHistory);
-            ack.acknowledge();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (Exception e) {
             rollbackTransaction(orderDto);
             e.printStackTrace();
+        } finally {
+            ack.acknowledge();
         }
     }
 
@@ -62,11 +63,12 @@ public class PointsKafkaHandler {
                         .build();
 
                 pointService.addPointKafka(pointHistory);
-                ack.acknowledge();
             }  catch (JsonProcessingException e) {
                 e.printStackTrace();
             }   catch(Exception e ) {
                 e.printStackTrace();
+            } finally {
+                ack.acknowledge();
             }
         }
 
@@ -78,12 +80,13 @@ public class PointsKafkaHandler {
 
                 if (OrderEvent.PAYMENT_FAIL.equals(orderDto.getOrderEvent())) {
                     pointService.rollbackUsePoints(orderDto);
-                    ack.acknowledge();
                 }
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             } catch(Exception e ) {
                 e.printStackTrace();
+            } finally {
+                ack.acknowledge();
             }
         }
 
