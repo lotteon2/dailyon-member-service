@@ -28,8 +28,6 @@ public class AddressService {
     private final MemberRepository memberRepository;
 
 
-
-    @Transactional
     public Page<AddressGetResponse> getMemberAddress(Long memberId, Pageable pageable){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
