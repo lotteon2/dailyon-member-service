@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/addresses")
 @CrossOrigin(origins = "*")
@@ -27,7 +25,7 @@ public class AddressApiController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<AddressGetResponse>> getMemberAddressTest(@RequestHeader Long memberId, Pageable pageable ){
+    public ResponseEntity<Page<AddressGetResponse>> getMemberAddress(@RequestHeader Long memberId, Pageable pageable ){
         return ResponseEntity.status(HttpStatus.OK).body(addressService.getMemberAddress(memberId, pageable));
     }
 }
