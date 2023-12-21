@@ -1,5 +1,6 @@
 package com.dailyon.memeberservice.member.service;
 
+import com.dailyon.memeberservice.address.entity.Address;
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
+
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -96,4 +98,6 @@ public class MemberService {
         Long point = memberRepository.findPointsById(memberId);
         return point;
     }
+
+
 }

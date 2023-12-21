@@ -69,4 +69,9 @@ public class Address {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public void setIsDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -52,18 +53,70 @@ public class AddressService {
     public Long createAddress(AddressCreateRequest request, Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
-        Address address = Address.builder()
-                        .member(member)
-                        .isDefault(request.getIsDefault())
-                        .name((request.getName()))
-                        .detailAddress(request.getDetailAddress())
-                        .roadAddress(request.getRoadAddress())
-                        .postCode(request.getPostCode())
-                        .phoneNumber(request.getPhoneNumber())
-                        .build();
+        if(request.getIsDefault()){
+            Address address = Address.builder()
+                    .member(member)
+                    .isDefault(request.getIsDefault())
+                    .name((request.getName()))
+                    .detailAddress(request.getDetailAddress())
+                    .roadAddress(request.getRoadAddress())
+                    .postCode(request.getPostCode())
+                    .phoneNumber(request.getPhoneNumber())
+                    .build();
 
-        addressRepository.save(address);
+            addressRepository.save(address);
+            setDefaultAddress(memberId, address.getId());
+        } else{
+            Address address = Address.builder()
+                    .member(member)
+                    .isDefault(request.getIsDefault())
+                    .name((request.getName()))
+                    .detailAddress(request.getDetailAddress())
+                    .roadAddress(request.getRoadAddress())
+                    .postCode(request.getPostCode())
+                    .phoneNumber(request.getPhoneNumber())
+                    .build();
 
-        return address.getId();
+            addressRepository.save(address);
+        }
+
+        return memberId;
+    }
+
+
+    @Transactional
+    public Long setDefaultAddress(Long memberId, Long addressId){
+        List<Address> addresses = addressRepository.findByMemberId(memberId);
+
+        Optional<Address> selectAddress = addresses.stream()
+                .filter(address -> address.getId().equals(addressId))
+                .findFirst();
+
+        Address selectedAddress = selectAddress.get();
+
+        for (Address address : addresses) {
+            address.setIsDefault(false);
+        }
+
+        selectedAddress.setIsDefault(true);
+
+        addressRepository.saveAll(addresses);
+
+        return addressId;
+    }
+
+    public AddressGetResponse getDefaultAddress(Long memberId) {
+        Address address = addressRepository.findFirstByMemberIdAndIsDefault(memberId, true);
+        AddressGetResponse response = new AddressGetResponse();
+
+        response.setIsDefault(address.getIsDefault());
+        response.setDetailAddress(address.getDetailAddress());
+        response.setRoadAddress(address.getRoadAddress());;
+        response.setId(address.getId());
+        response.setPhoneNumber(address.getPhoneNumber());
+        response.setPostCode(address.getPostCode());
+        response.setName(address.getName());
+
+        return response;
     }
 }
