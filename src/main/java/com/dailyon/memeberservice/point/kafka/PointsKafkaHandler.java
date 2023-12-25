@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
 import com.dailyon.memeberservice.point.service.PointService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
@@ -38,6 +37,7 @@ public class PointsKafkaHandler {
                         .build();
 
             pointService.usePointKafka(pointHistory);
+            producePointUseSuccessMessage(orderDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -63,7 +63,7 @@ public class PointsKafkaHandler {
                         .build();
 
                 pointService.addPointKafka(pointHistory);
-                producePointSuccessMessage(orderDto);
+                producePointAddSuccessMessage(orderDto);
             }  catch (JsonProcessingException e) {
                 e.printStackTrace();
             }   catch(Exception e ) {
@@ -103,13 +103,21 @@ public class PointsKafkaHandler {
         }
     }
 
-    public void producePointSuccessMessage(OrderDto orderDto){
+    public void producePointUseSuccessMessage(OrderDto orderDto){
        try{
            String data = objectMapper.writeValueAsString(orderDto);
            kafkaTemplate.send("use-member-points", data);
        } catch (Exception e) {
            e.printStackTrace();
        }
+    }
 
+    public void producePointAddSuccessMessage(OrderDto orderDto){
+        try{
+            String data = objectMapper.writeValueAsString(orderDto);
+            kafkaTemplate.send("add-member-points", data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
