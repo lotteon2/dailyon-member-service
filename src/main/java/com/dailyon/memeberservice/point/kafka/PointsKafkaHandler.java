@@ -37,6 +37,7 @@ public class PointsKafkaHandler {
                         .build();
 
             pointService.usePointKafka(pointHistory);
+            producePointUseSuccessMessage(orderDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -62,7 +63,6 @@ public class PointsKafkaHandler {
                         .build();
 
                 pointService.addPointKafka(pointHistory);
-                producePointAddSuccessMessage(orderDto);
             }  catch (JsonProcessingException e) {
                 e.printStackTrace();
             }   catch(Exception e ) {
@@ -97,16 +97,17 @@ public class PointsKafkaHandler {
             kafkaTemplate.send("cancel-order", objectMapper.writeValueAsString(orderDto));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-        } catch(Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    public void producePointAddSuccessMessage(OrderDto orderDto){
+
+    public void producePointUseSuccessMessage(OrderDto orderDto){
         try{
             String data = objectMapper.writeValueAsString(orderDto);
-            kafkaTemplate.send("add-member-points", data);
+            kafkaTemplate.send("use-member-points", data);
         } catch (Exception e) {
             e.printStackTrace();
         }
