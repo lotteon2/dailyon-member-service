@@ -7,6 +7,7 @@ import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
+@Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
 
@@ -64,12 +66,12 @@ public class MemberService {
 
     @Transactional
     public Long modifyMember(MemberModifyRequest request, Long id){
+        log.info(String.valueOf(id));
+        log.info("#@#@#@#@#@#@#@#@");
         Member member = memberRepository.findById(id).orElseThrow();
 
         String nickname = Optional.ofNullable(request.getNickname())
                 .orElse(member.getNickname());
-        String profileImgUrl = Optional.ofNullable(request.getProfileImgUrl())
-                .orElse(member.getProfileImgUrl());
         String gender = Optional.ofNullable(request.getGender())
                 .orElse(member.getGender());
         String birth = Optional.ofNullable(request.getBirth())
@@ -77,7 +79,6 @@ public class MemberService {
 
         member.changeMember(
                 nickname,
-                profileImgUrl,
                 birth,
                 gender
         );
