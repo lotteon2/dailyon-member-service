@@ -32,7 +32,7 @@ public class AddressService {
     public Page<AddressGetResponse> getMemberAddress(Long memberId, Pageable pageable){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
-        Page<Address> addresses = addressRepository.findByMemberId(memberId, pageable);
+        Page<Address> addresses = addressRepository.findByMemberId(member.getId(), pageable);
 
         Page<AddressGetResponse> addressResponses = addresses.map(address -> new AddressGetResponse(
                 address.getId(),
