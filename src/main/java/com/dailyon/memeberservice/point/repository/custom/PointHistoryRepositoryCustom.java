@@ -10,9 +10,6 @@ import java.util.List;
 
 public interface PointHistoryRepositoryCustom {
 
-    List<GetPointHistory> findByMemberId(Long memberId);
-
     Page<PointHistory> findByMemberId(Long memberId, Pageable pageable);
-
 
 }

@@ -2,7 +2,6 @@ package com.dailyon.memeberservice.address.api;
 
 import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.address.api.request.AddressCreateRequest;
-import com.dailyon.memeberservice.address.entity.Address;
 import com.dailyon.memeberservice.address.service.AddressService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,5 +37,10 @@ public class AddressApiController {
     @GetMapping("/default")
     public ResponseEntity<AddressGetResponse> getDefaultAddress(@RequestHeader Long memberId ){
         return ResponseEntity.status(HttpStatus.OK).body(addressService.getDefaultAddress(memberId));
+    }
+
+    @DeleteMapping("/{addressId}")
+    public ResponseEntity deleteAddress(@RequestHeader Long memberId, @PathVariable Long addressId ){
+        return ResponseEntity.status(HttpStatus.OK).body(addressService.deleteAddress(memberId, addressId));
     }
 }

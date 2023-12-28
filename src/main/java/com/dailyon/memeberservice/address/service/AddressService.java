@@ -109,4 +109,20 @@ public class AddressService {
 
         return response;
     }
+
+    @Transactional
+    public Long deleteAddress(Long memberId, Long addressId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
+        Address addressToDelete = addressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        if (!addressToDelete.getMember().equals(member)) {
+            throw new RuntimeException("Address does not belong to the member");
+        }
+        //addressRepository.delete(addressToDelete);
+        addressRepository.deleteById(addressToDelete.getId());
+        return addressId;
+    }
 }
