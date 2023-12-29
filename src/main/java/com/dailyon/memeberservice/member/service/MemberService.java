@@ -5,7 +5,10 @@ import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
 import com.dailyon.memeberservice.member.entity.Member;
+import com.dailyon.memeberservice.member.kafka.MemberKafkaHandler;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
+import dailyon.domain.sns.kafka.dto.MemberCreateDTO;
+import dailyon.domain.sns.kafka.dto.MemberUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final MemberKafkaHandler memberKafkaHandler;
 
     @Transactional
     public Long registerMember(MemberCreateRequest request){
@@ -41,6 +45,14 @@ public class MemberService {
                 .isDelted(false)
                 .build();
         memberRepository.save(member);
+
+        MemberCreateDTO memberCreateDTO = MemberCreateDTO.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .profileImgUrl(member.getProfileImgUrl())
+                .code(member.getCode())
+                .build();
+        memberKafkaHandler.memberCreateUseSuccessMessage(memberCreateDTO);
 
         return member.getId();
     }
@@ -66,8 +78,6 @@ public class MemberService {
 
     @Transactional
     public Long modifyMember(MemberModifyRequest request, Long id){
-        log.info(String.valueOf(id));
-        log.info("#@#@#@#@#@#@#@#@");
         Member member = memberRepository.findById(id).orElseThrow();
 
         String nickname = Optional.ofNullable(request.getNickname())
@@ -82,6 +92,13 @@ public class MemberService {
                 birth,
                 gender
         );
+
+        MemberUpdateDTO memberUpdateDTO = MemberUpdateDTO.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .profileImgUrl(member.getProfileImgUrl())
+                .build();
+        memberKafkaHandler.memberUpdateUseSuccessMessage(memberUpdateDTO);
 
         return id;
     }

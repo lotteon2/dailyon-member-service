@@ -1,5 +1,6 @@
 package com.dailyon.memeberservice.point.service;
 
+import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.member.service.MemberService;
@@ -10,6 +11,8 @@ import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
 import com.dailyon.memeberservice.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -17,9 +20,13 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
+@Slf4j
 public class PointService {
     private final PointRepository pointRepository;
     private final MemberRepository memberRepository;
@@ -90,8 +97,22 @@ public class PointService {
 
 
     @Transactional
-    public List<GetPointHistory> getPointHistory(Long memberId) {
-        return pointRepository.findByMemberId(memberId);
+    public Page<GetPointHistory> getPointHistory(Long memberId, Pageable pageable) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
+        Page<PointHistory> points = pointRepository.findByMemberId(member.getId(), pageable);
+
+        log.info("#@#@#@#");
+        log.info(points.toString());
+
+        Page<GetPointHistory> pointResponses = points.map(point -> new GetPointHistory(
+                point.getAmount(),
+                point.isStatus(),
+                point.getSource(),
+                point.getUtilize(),
+                point.getCreatedAt()
+        ));
+
+        return pointResponses;
     }
 }
