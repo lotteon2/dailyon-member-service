@@ -52,7 +52,7 @@ public class MemberService {
                 .profileImgUrl(member.getProfileImgUrl())
                 .code(member.getCode())
                 .build();
-        memberKafkaHandler.MemberCreateUseSuccessMessage(memberCreateDTO);
+        memberKafkaHandler.memberCreateUseSuccessMessage(memberCreateDTO);
 
         return member.getId();
     }
@@ -98,7 +98,7 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .profileImgUrl(member.getProfileImgUrl())
                 .build();
-        memberKafkaHandler.MemberUpdateUseSuccessMessage(memberUpdateDTO);
+        memberKafkaHandler.memberUpdateUseSuccessMessage(memberUpdateDTO);
 
         return id;
     }

@@ -21,7 +21,7 @@ public class MemberKafkaHandler {
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public void MemberCreateUseSuccessMessage(MemberCreateDTO memberCreateDTO){
+    public void memberCreateUseSuccessMessage(MemberCreateDTO memberCreateDTO){
         try{
             String data = objectMapper.writeValueAsString(memberCreateDTO);
             kafkaTemplate.send("create-member-for-sns", data);
@@ -30,7 +30,7 @@ public class MemberKafkaHandler {
         }
     }
 
-    public void MemberUpdateUseSuccessMessage(MemberUpdateDTO memberUpdateDTO){
+    public void memberUpdateUseSuccessMessage(MemberUpdateDTO memberUpdateDTO){
         try{
             String data = objectMapper.writeValueAsString(memberUpdateDTO);
             kafkaTemplate.send("update-member-for-sns", data);
