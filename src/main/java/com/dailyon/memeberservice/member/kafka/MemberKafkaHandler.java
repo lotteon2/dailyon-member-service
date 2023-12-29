@@ -7,6 +7,7 @@ import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
 import com.dailyon.memeberservice.point.service.PointService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dailyon.domain.common.KafkaTopic;
 import dailyon.domain.sns.kafka.dto.MemberCreateDTO;
 import dailyon.domain.sns.kafka.dto.MemberUpdateDTO;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class MemberKafkaHandler {
     public void memberCreateUseSuccessMessage(MemberCreateDTO memberCreateDTO){
         try{
             String data = objectMapper.writeValueAsString(memberCreateDTO);
-            kafkaTemplate.send("create-member-for-sns", data);
+            kafkaTemplate.send(KafkaTopic.CREATE_MEMBER_FOR_SNS, data);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,7 +34,7 @@ public class MemberKafkaHandler {
     public void memberUpdateUseSuccessMessage(MemberUpdateDTO memberUpdateDTO){
         try{
             String data = objectMapper.writeValueAsString(memberUpdateDTO);
-            kafkaTemplate.send("update-member-for-sns", data);
+            kafkaTemplate.send(KafkaTopic.UPDATE_MEMBER_FOR_SNS, data);
         } catch (Exception e) {
             e.printStackTrace();
         }
