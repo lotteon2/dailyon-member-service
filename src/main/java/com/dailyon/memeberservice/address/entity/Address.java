@@ -74,4 +74,14 @@ public class Address {
         this.isDefault = isDefault;
     }
 
+    public void updateAddress(String name, String detailAddress, String roadAddress, String postCode,
+                              String phoneNumber){
+
+        this.name = name;
+        this.detailAddress = detailAddress;
+        this.roadAddress = roadAddress;
+        this.postCode = postCode;
+        this.phoneNumber = phoneNumber;
+    }
+
 }
