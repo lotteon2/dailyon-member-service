@@ -64,6 +64,7 @@ public class AddressService {
                     .phoneNumber(request.getPhoneNumber())
                     .build();
 
+
             addressRepository.save(address);
             setDefaultAddress(memberId, address.getId());
         } else{
