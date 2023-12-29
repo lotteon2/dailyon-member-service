@@ -41,12 +41,12 @@ public class AddressApiController {
     }
 
     @DeleteMapping("/{addressId}")
-    public ResponseEntity deleteAddress(@RequestHeader Long memberId, @PathVariable Long addressId ){
+    public ResponseEntity<Long> deleteAddress(@RequestHeader Long memberId, @PathVariable Long addressId ){
         return ResponseEntity.status(HttpStatus.OK).body(addressService.deleteAddress(memberId, addressId));
     }
 
     @PutMapping
-    public ResponseEntity updateAddress(@RequestHeader Long memberId, @RequestBody AddressUpdateRequest request){
+    public ResponseEntity<Long> updateAddress(@RequestHeader Long memberId, @RequestBody AddressUpdateRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(addressService.updateAddress(memberId, request));
     }
 
