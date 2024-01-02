@@ -1,5 +1,6 @@
 package com.dailyon.memeberservice.address.api;
 
+import com.dailyon.memeberservice.address.api.request.AddressUpdateRequest;
 import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.address.api.request.AddressCreateRequest;
 import com.dailyon.memeberservice.address.service.AddressService;
@@ -40,7 +41,13 @@ public class AddressApiController {
     }
 
     @DeleteMapping("/{addressId}")
-    public ResponseEntity deleteAddress(@RequestHeader Long memberId, @PathVariable Long addressId ){
+    public ResponseEntity<Long> deleteAddress(@RequestHeader Long memberId, @PathVariable Long addressId ){
         return ResponseEntity.status(HttpStatus.OK).body(addressService.deleteAddress(memberId, addressId));
     }
+
+    @PutMapping
+    public ResponseEntity<Long> updateAddress(@RequestHeader Long memberId, @RequestBody AddressUpdateRequest request){
+        return ResponseEntity.status(HttpStatus.OK).body(addressService.updateAddress(memberId, request));
+    }
+
 }
