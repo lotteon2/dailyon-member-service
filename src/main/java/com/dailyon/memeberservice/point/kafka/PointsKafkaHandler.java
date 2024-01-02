@@ -28,15 +28,19 @@ public class PointsKafkaHandler {
         try {
             orderDto = objectMapper.readValue(message, OrderDto.class);
 
-            PointHistory pointHistory = PointHistory.builder()
-                    .memberId(orderDto.getMemberId())
-                    .status(true)
-                    .amount((long) orderDto.getUsedPoints())
-                    .source(PointSource.valueOf("BUY"))
-                    .utilize("제품구매")
+            if(orderDto.getUsedPoints() !=0)
+            {
+                PointHistory pointHistory = PointHistory.builder()
+                        .memberId(orderDto.getMemberId())
+                        .status(true)
+                        .amount((long) orderDto.getUsedPoints())
+                        .source(PointSource.valueOf("BUY"))
+                        .utilize("제품구매")
                         .build();
 
-            pointService.usePointKafka(pointHistory);
+                pointService.usePointKafka(pointHistory);
+            }
+
             producePointUseSuccessMessage(orderDto);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
