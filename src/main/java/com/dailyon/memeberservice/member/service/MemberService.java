@@ -127,18 +127,6 @@ public class MemberService {
     }
 
     @Transactional
-    public Long updateMemberImg(MultipartFile profileImg, Long id) throws IOException {
-        Member member = memberRepository.findById(id).orElseThrow();
-
-       String newFile = s3Util.upload(profileImg);
-
-        member.changeProfileImg(newFile);
-
-        return id;
-    }
-
-
-    @Transactional
     public Long softDelete(Long id){
         Member member = memberRepository.findById(id).orElseThrow();
         member.softDelete();

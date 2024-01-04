@@ -50,13 +50,6 @@ public class MemberApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.softDelete(memberId));
     }
 
-    @PostMapping(value = "/profileimg", consumes = "multipart/form-data")
-    public ResponseEntity<Long> updateProfileImg(@RequestParam("file") MultipartFile file, @RequestHeader Long memberId) throws IOException {
-        log.info("Received file: " + file.getOriginalFilename() + " (" + file.getSize() + " bytes)");
-        log.info("$%%%%%%%%%%%%%%%%%%%%%%%%%%");
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.updateMemberImg(file, memberId));
-    }
-
     @GetMapping("/profileimg")
     public ResponseEntity<String> preurl(@RequestHeader Long memberId){
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.geturl(memberId));
