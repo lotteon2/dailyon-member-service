@@ -1,16 +1,23 @@
 package com.dailyon.memeberservice.member.api;
 
+import com.amazonaws.auth.policy.Resource;
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
 import com.dailyon.memeberservice.member.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/members")
 @CrossOrigin(origins = "*")
+@Slf4j
 public class MemberApiController {
     private final MemberService memberService;
 
@@ -42,4 +49,18 @@ public class MemberApiController {
     public ResponseEntity<Long> deleteMember(@RequestHeader Long memberId){
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.softDelete(memberId));
     }
+
+    @PostMapping(value = "/profileimg", consumes = "multipart/form-data")
+    public ResponseEntity<Long> updateProfileImg(@RequestParam("file") MultipartFile file, @RequestHeader Long memberId) throws IOException {
+        log.info("Received file: " + file.getOriginalFilename() + " (" + file.getSize() + " bytes)");
+        log.info("$%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.updateMemberImg(file, memberId));
+    }
+
+    @GetMapping("/profileimg")
+    public ResponseEntity<String> preurl(@RequestHeader Long memberId){
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.geturl(memberId));
+    }
+
+
 }
