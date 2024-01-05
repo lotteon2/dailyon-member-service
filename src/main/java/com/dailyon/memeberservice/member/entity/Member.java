@@ -85,11 +85,13 @@ public class Member {
             String birth,
             String gender
     ) {
-        this.email = email;
         this.nickname = nickname;
-        this.profileImgUrl = profileImgUrl;
         this.gender = gender;
         this.birth = birth;
+    }
+
+    public void changeProfileImg(String profileImgUrl){
+        this.profileImgUrl = profileImgUrl;
     }
 
     public void changePoint(Long amount) {
