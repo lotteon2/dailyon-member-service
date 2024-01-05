@@ -1,9 +1,10 @@
 package com.dailyon.memeberservice.member.service;
 
-import com.dailyon.memeberservice.address.entity.Address;
+import com.amazonaws.auth.policy.Resource;
 import com.dailyon.memeberservice.member.api.request.MemberCreateRequest;
 import com.dailyon.memeberservice.member.api.response.MemberGetResponse;
 import com.dailyon.memeberservice.member.api.request.MemberModifyRequest;
+import com.dailyon.memeberservice.member.config.S3Util;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.kafka.MemberKafkaHandler;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
@@ -11,9 +12,16 @@ import dailyon.domain.sns.kafka.dto.MemberCreateDTO;
 import dailyon.domain.sns.kafka.dto.MemberUpdateDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +33,7 @@ import java.util.UUID;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberKafkaHandler memberKafkaHandler;
+    private final S3Util s3Util;
 
     @Transactional
     public Long registerMember(MemberCreateRequest request){
@@ -34,10 +43,24 @@ public class MemberService {
                 .orElse("");
         String uuid = UUID.randomUUID().toString();
 
+
+        File tempFile = new File("temp_image.jpg");
+        try {
+            FileUtils.copyURLToFile(new URL(profileImgUrl), tempFile);
+        } catch (IOException e) {
+            log.error("Failed to copy URL to file", e);
+        }
+
+        String fileName = s3Util.createFilePath(tempFile.getName());
+        s3Util.uploadImage(tempFile, fileName);
+
+        tempFile.delete();
+
+
         Member member = Member.builder()
                 .email(request.getEmail())
                 .nickname(request.getNickname())
-                .profileImgUrl(profileImgUrl)
+                .profileImgUrl(fileName)
                 .gender(gender)
                 .birth(request.getBirth())
                 .code(uuid)
@@ -103,7 +126,6 @@ public class MemberService {
         return id;
     }
 
-
     @Transactional
     public Long softDelete(Long id){
         Member member = memberRepository.findById(id).orElseThrow();
@@ -118,4 +140,12 @@ public class MemberService {
     }
 
 
+    public String geturl(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow();
+
+        String memberUrl = s3Util.getPreSignedUrl(member.getProfileImgUrl());
+
+        return memberUrl;
+
+    }
 }

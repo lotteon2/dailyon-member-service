@@ -8,6 +8,7 @@ import com.dailyon.memeberservice.address.repository.AddressRepository;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
+@Slf4j
 public class AddressService {
 
     private final AddressRepository addressRepository;
@@ -94,19 +96,23 @@ public class AddressService {
 
     public AddressGetResponse getDefaultAddress(Long memberId) {
         Address address = addressRepository.findFirstByMemberIdAndIsDefault(memberId, true);
-        AddressGetResponse response = new AddressGetResponse();
+        if (address != null) {
+            AddressGetResponse response = new AddressGetResponse();
 
-        response.setIsDefault(address.getIsDefault());
-        response.setDetailAddress(address.getDetailAddress());
-        response.setRoadAddress(address.getRoadAddress());
-        ;
-        response.setId(address.getId());
-        response.setPhoneNumber(address.getPhoneNumber());
-        response.setPostCode(address.getPostCode());
-        response.setName(address.getName());
+            response.setIsDefault(address.getIsDefault());
+            response.setDetailAddress(address.getDetailAddress());
+            response.setRoadAddress(address.getRoadAddress());
+            response.setId(address.getId());
+            response.setPhoneNumber(address.getPhoneNumber());
+            response.setPostCode(address.getPostCode());
+            response.setName(address.getName());
 
-        return response;
+            return response;
+        } else {
+            return null;
+        }
     }
+
 
     @Transactional
     public Long deleteAddress(Long memberId, Long addressId) {
@@ -142,9 +148,26 @@ public class AddressService {
                 request.getDetailAddress(),
                 request.getRoadAddress(),
                 request.getPostCode(),
-                request.getPhoneNumber()
+                request.getPhoneNumber(),
+                request.getIsDefault()
         );
 
+        if(request.getIsDefault()){
+            log.info("true");
+            List<Address> addresses = addressRepository.findByMemberId(memberId);
+
+            for (Address addr : addresses) {
+                // 모든 주소의 isDefault를 false로 초기화
+                addr.setIsDefault(false);
+
+                // request의 addressId와 같은 주소만 isDefault를 true로 변경
+                if (addr.getId().equals(request.getAddressId())) {
+                    addr.setIsDefault(true);
+                }
+            }
+        } else {
+            log.info("false");
+        }
 
         return request.getAddressId();
     }
