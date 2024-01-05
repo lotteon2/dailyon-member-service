@@ -21,4 +21,6 @@ public class AddressUpdateRequest {
 
     private String phoneNumber;
 
+    private Boolean isDefault;
+
 }
