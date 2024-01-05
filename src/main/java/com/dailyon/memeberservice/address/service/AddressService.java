@@ -94,19 +94,23 @@ public class AddressService {
 
     public AddressGetResponse getDefaultAddress(Long memberId) {
         Address address = addressRepository.findFirstByMemberIdAndIsDefault(memberId, true);
-        AddressGetResponse response = new AddressGetResponse();
+        if (address != null) {
+            AddressGetResponse response = new AddressGetResponse();
 
-        response.setIsDefault(address.getIsDefault());
-        response.setDetailAddress(address.getDetailAddress());
-        response.setRoadAddress(address.getRoadAddress());
-        ;
-        response.setId(address.getId());
-        response.setPhoneNumber(address.getPhoneNumber());
-        response.setPostCode(address.getPostCode());
-        response.setName(address.getName());
+            response.setIsDefault(address.getIsDefault());
+            response.setDetailAddress(address.getDetailAddress());
+            response.setRoadAddress(address.getRoadAddress());
+            response.setId(address.getId());
+            response.setPhoneNumber(address.getPhoneNumber());
+            response.setPostCode(address.getPostCode());
+            response.setName(address.getName());
 
-        return response;
+            return response;
+        } else {
+            return null;
+        }
     }
+
 
     @Transactional
     public Long deleteAddress(Long memberId, Long addressId) {
