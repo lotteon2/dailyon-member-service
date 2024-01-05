@@ -9,6 +9,7 @@ import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.api.response.GetPointHistory;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
+import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
 import com.dailyon.memeberservice.point.repository.PointRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -113,11 +114,11 @@ public class PointService {
         return pointResponses;
     }
 
-    public void refundUsePoints(OrderDto orderDto) {
+    public void refundUsePoints(RefundDTO refundDto) {
         PointHistory pointHistory = PointHistory.builder()
-                .memberId(orderDto.getMemberId())
+                .memberId( refundDto.getMemberId())
                 .status(false)
-                .amount((long) orderDto.getUsedPoints())
+                .amount((long)  refundDto.getRefundPoints())
                 .source(PointSource.valueOf("REFUND"))
                 .utilize("포인트 사용 취소")
                 .build();

@@ -3,6 +3,7 @@ package com.dailyon.memeberservice.point.kafka;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
+import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
 import com.dailyon.memeberservice.point.service.PointService;
@@ -96,18 +97,17 @@ public class PointsKafkaHandler {
 
         @KafkaListener(topics = "create-refund")
         public void refundPoints(String message, Acknowledgment ack) {
-            OrderDto orderDto = null;
+            RefundDTO refundDto = null;
             try {
-                orderDto = objectMapper.readValue(message, OrderDto.class);
-                if(orderDto.getUsedPoints() !=0) {
-                    pointService.refundUsePoints(orderDto);
+                refundDto = objectMapper.readValue(message, RefundDTO.class);
+                if(refundDto.getRefundPoints() !=0) {
+                    pointService.refundUsePoints(refundDto);
                 }
+                ack.acknowledge();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             } catch(Exception e ) {
                 e.printStackTrace();
-            } finally {
-                ack.acknowledge();
             }
         }
 
