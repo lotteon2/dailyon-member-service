@@ -6,6 +6,6 @@ public enum PointSource {
     REVIEW,
     PARTNERS,
     CHARGE,
-
+    REFUND,
     CANCEL
 }

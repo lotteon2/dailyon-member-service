@@ -94,6 +94,22 @@ public class PointsKafkaHandler {
             }
         }
 
+        @KafkaListener(topics = "create-refund")
+        public void refundPoints(String message, Acknowledgment ack) {
+            OrderDto orderDto = null;
+            try {
+                orderDto = objectMapper.readValue(message, OrderDto.class);
+                if(orderDto.getUsedPoints() !=0) {
+                    pointService.refundUsePoints(orderDto);
+                }
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            } catch(Exception e ) {
+                e.printStackTrace();
+            } finally {
+                ack.acknowledge();
+            }
+        }
 
     public void rollbackTransaction(OrderDto orderDto) {
         try {
@@ -105,7 +121,6 @@ public class PointsKafkaHandler {
             e.printStackTrace();
         }
     }
-
 
 
     public void producePointUseSuccessMessage(OrderDto orderDto){

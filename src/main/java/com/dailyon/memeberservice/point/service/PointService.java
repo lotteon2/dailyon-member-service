@@ -115,4 +115,16 @@ public class PointService {
 
         return pointResponses;
     }
+
+    public void refundUsePoints(OrderDto orderDto) {
+        PointHistory pointHistory = PointHistory.builder()
+                .memberId(orderDto.getMemberId())
+                .status(true)
+                .amount((long) orderDto.getUsedPoints())
+                .source(PointSource.valueOf("REFUND"))
+                .utilize("포인트 사용 취소")
+                .build();
+
+        addPointKafka(pointHistory);
+    }
 }
