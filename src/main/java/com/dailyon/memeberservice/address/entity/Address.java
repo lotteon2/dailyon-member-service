@@ -75,9 +75,10 @@ public class Address {
     }
 
     public void updateAddress(String name, String detailAddress, String roadAddress, String postCode,
-                              String phoneNumber){
+                              String phoneNumber, boolean isDefault){
 
         this.name = name;
+        this.isDefault = isDefault;
         this.detailAddress = detailAddress;
         this.roadAddress = roadAddress;
         this.postCode = postCode;
