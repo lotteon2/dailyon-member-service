@@ -102,9 +102,6 @@ public class PointService {
 
         Page<PointHistory> points = pointRepository.findByMemberId(member.getId(), pageable);
 
-        log.info("#@#@#@#");
-        log.info(points.toString());
-
         Page<GetPointHistory> pointResponses = points.map(point -> new GetPointHistory(
                 point.getAmount(),
                 point.isStatus(),
