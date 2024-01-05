@@ -86,7 +86,7 @@ public class PointService {
     public void rollbackUsePoints(OrderDto orderDto) {
         PointHistory pointHistory = PointHistory.builder()
                 .memberId(orderDto.getMemberId())
-                .status(true)
+                .status(false)
                 .amount((long) orderDto.getUsedPoints())
                 .source(PointSource.valueOf("CANCLE"))
                 .utilize("제품구매 취소")
@@ -119,7 +119,7 @@ public class PointService {
     public void refundUsePoints(OrderDto orderDto) {
         PointHistory pointHistory = PointHistory.builder()
                 .memberId(orderDto.getMemberId())
-                .status(true)
+                .status(false)
                 .amount((long) orderDto.getUsedPoints())
                 .source(PointSource.valueOf("REFUND"))
                 .utilize("포인트 사용 취소")
