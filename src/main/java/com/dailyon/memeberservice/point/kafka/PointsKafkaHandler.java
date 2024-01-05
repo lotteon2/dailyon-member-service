@@ -4,6 +4,7 @@ import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
 import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
+import com.dailyon.memeberservice.point.kafka.dto.ReviewDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
 import com.dailyon.memeberservice.point.service.PointService;
@@ -53,13 +54,13 @@ public class PointsKafkaHandler {
         }
     }
 
-        @KafkaListener(topics = "create-review")
-        public void addPoints (String message, Acknowledgment ack){
-            ReviewDto reviewDto = null;
-            try {
-                reviewDto = objectMapper.readValue(message, ReviewDto.class);
+    @KafkaListener(topics = "create-review")
+    public void addPoints (String message, Acknowledgment ack){
+        ReviewDto reviewDto = null;
+        try {
+            reviewDto = objectMapper.readValue(message, ReviewDto.class);
 
-                PointHistory pointHistory = PointHistory.builder()
+            PointHistory pointHistory = PointHistory.builder()
                         .memberId(reviewDto.getMemberId())
                         .status(false)
                         .amount((long) reviewDto.getPoint())
@@ -67,15 +68,15 @@ public class PointsKafkaHandler {
                         .utilize("리뷰 작성")
                         .build();
 
-                pointService.addPointKafka(pointHistory);
-            }  catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }   catch(Exception e ) {
-                e.printStackTrace();
-            } finally {
-                ack.acknowledge();
-            }
+            pointService.addPointKafka(pointHistory);
+        }  catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }   catch(Exception e ) {
+            e.printStackTrace();
+        } finally {
+            ack.acknowledge();
         }
+    }
 
         @KafkaListener(topics = "cancel-order")
         public void cancelPoints(String message, Acknowledgment ack) {
