@@ -55,16 +55,16 @@ public class PointsKafkaHandler {
 
         @KafkaListener(topics = "create-review")
         public void addPoints (String message, Acknowledgment ack){
-            OrderDto orderDto = null;
+            ReviewDto reviewDto = null;
             try {
-                orderDto = objectMapper.readValue(message, OrderDto.class);
+                reviewDto = objectMapper.readValue(message, ReviewDto.class);
 
                 PointHistory pointHistory = PointHistory.builder()
-                        .memberId(orderDto.getMemberId())
+                        .memberId(reviewDto.getMemberId())
                         .status(false)
-                        .amount((long) orderDto.getUsedPoints())
+                        .amount((long) reviewDto.getPoint())
                         .source(PointSource.valueOf("Review"))
-                        .utilize("제품구매")
+                        .utilize("리뷰 작성")
                         .build();
 
                 pointService.addPointKafka(pointHistory);
