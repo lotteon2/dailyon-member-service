@@ -35,7 +35,7 @@ public class PointsKafkaHandler {
                         .memberId(orderDto.getMemberId())
                         .status(true)
                         .amount((long) orderDto.getUsedPoints())
-                        .source(PointSource.valueOf("BUY"))
+                        .source(PointSource.BUY)
                         .utilize("제품구매")
                         .build();
 
@@ -63,17 +63,16 @@ public class PointsKafkaHandler {
                         .memberId(orderDto.getMemberId())
                         .status(false)
                         .amount((long) orderDto.getUsedPoints())
-                        .source(PointSource.valueOf("Review"))
-                        .utilize("제품구매")
+                        .source(PointSource.REVIEW)
+                        .utilize("리뷰작성")
                         .build();
 
                 pointService.addPointKafka(pointHistory);
+                ack.acknowledge();
             }  catch (JsonProcessingException e) {
                 e.printStackTrace();
             }   catch(Exception e ) {
                 e.printStackTrace();
-            } finally {
-                ack.acknowledge();
             }
         }
 

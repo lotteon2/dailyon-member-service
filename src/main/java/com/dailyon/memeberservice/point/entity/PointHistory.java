@@ -28,6 +28,7 @@ public class PointHistory {
     private boolean status;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private PointSource source;
 
     private String utilize;
