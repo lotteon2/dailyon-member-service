@@ -34,8 +34,10 @@ public class PointService {
 
     @Transactional
     public void addPoint(Long memberId, PointHistoryRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+
         PointHistory pointHistory = PointHistory.builder()
-                .memberId(memberId)
+                .member(member)
                 .status(false)
                 .amount(request.getAmount())
                 .source(request.getSource())
@@ -44,14 +46,15 @@ public class PointService {
 
         pointRepository.save(pointHistory);
 
-        Member member = memberRepository.findById(memberId).orElseThrow();
         member.changePoint(request.getAmount());
     }
 
     @Transactional
     public void usePoint(Long memberId, PointHistoryRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
+
         PointHistory pointHistory = PointHistory.builder()
-                .memberId(memberId)
+                .member(member)
                 .status(true)
                 .amount(request.getAmount())
                 .source(request.getSource())
@@ -60,15 +63,13 @@ public class PointService {
 
         pointRepository.save(pointHistory);
 
-
-        Member member = memberRepository.findById(memberId).orElseThrow();
         member.changePoint(-request.getAmount());
     }
 
     @Transactional
     public void usePointKafka(PointHistory request) throws Exception {
         pointRepository.save(request);
-        Member member = memberRepository.findById(request.getMemberId()).orElseThrow();
+        Member member = memberRepository.findById(request.getMember());
         if (member.getPoint() < request.getAmount()) {
             throw new Exception("Insufficient points for member: " + member.getId());
         }
@@ -80,13 +81,16 @@ public class PointService {
     public void addPointKafka(PointHistory pointHistory ) {
         pointRepository.save(pointHistory);
 
-        Member member = memberRepository.findById(pointHistory.getId()).orElseThrow();
+        Member member = memberRepository.findById(pointHistory.getMember());
         member.changePoint(pointHistory.getAmount());
     }
 
     public void rollbackUsePoints(OrderDto orderDto) {
+        Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
+
+
         PointHistory pointHistory = PointHistory.builder()
-                .memberId(orderDto.getMemberId())
+                .member(member)
                 .status(false)
                 .amount((long) orderDto.getUsedPoints())
                 .source(PointSource.valueOf("CANCLE"))
@@ -115,8 +119,11 @@ public class PointService {
     }
 
     public void refundUsePoints(RefundDTO refundDto) {
+        Member member = memberRepository.findById(refundDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
+
+
         PointHistory pointHistory = PointHistory.builder()
-                .memberId( refundDto.getMemberId())
+                .member(member)
                 .status(false)
                 .amount((long)  refundDto.getRefundPoints())
                 .source(PointSource.valueOf("REFUND"))
