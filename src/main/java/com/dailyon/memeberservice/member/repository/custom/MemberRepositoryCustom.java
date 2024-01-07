@@ -7,5 +7,4 @@ public interface MemberRepositoryCustom {
 
     Long findPointsById(Long memberId);
 
-    Member findById(Member member);
 }

@@ -69,7 +69,8 @@ public class PointService {
     @Transactional
     public void usePointKafka(PointHistory request) throws Exception {
         pointRepository.save(request);
-        Member member = memberRepository.findById(request.getMember());
+        Member member = request.getMember();
+
         if (member.getPoint() < request.getAmount()) {
             throw new Exception("Insufficient points for member: " + member.getId());
         }
@@ -81,7 +82,7 @@ public class PointService {
     public void addPointKafka(PointHistory pointHistory ) {
         pointRepository.save(pointHistory);
 
-        Member member = memberRepository.findById(pointHistory.getMember());
+        Member member = pointHistory.getMember();
         member.changePoint(pointHistory.getAmount());
     }
 

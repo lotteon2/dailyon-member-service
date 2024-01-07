@@ -1,5 +1,7 @@
 package com.dailyon.memeberservice.member.repository.custom;
 
+import com.dailyon.memeberservice.member.entity.Member;
+
 import javax.persistence.PersistenceContext;
 import javax.persistence.EntityManager;
 
@@ -24,5 +26,6 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
                 .getSingleResult();
         return points;
     }
+
 
 }

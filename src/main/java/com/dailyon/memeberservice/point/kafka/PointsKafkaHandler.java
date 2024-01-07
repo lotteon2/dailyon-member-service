@@ -1,5 +1,7 @@
 package com.dailyon.memeberservice.point.kafka;
 
+import com.dailyon.memeberservice.member.entity.Member;
+import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
@@ -20,11 +22,13 @@ public class PointsKafkaHandler {
     private final PointService pointService;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final MemberRepository memberRepository;
 
 
     @KafkaListener(topics = "create-order-use-coupon")
     public void usePoints(String message, Acknowledgment ack) {
         OrderDto orderDto = null;
+        Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
         try {
             orderDto = objectMapper.readValue(message, OrderDto.class);
@@ -32,7 +36,7 @@ public class PointsKafkaHandler {
             if(orderDto.getUsedPoints() !=0)
             {
                 PointHistory pointHistory = PointHistory.builder()
-                        .memberId(orderDto.getMemberId())
+                        .member(member)
                         .status(true)
                         .amount((long) orderDto.getUsedPoints())
                         .source(PointSource.BUY)
@@ -56,11 +60,13 @@ public class PointsKafkaHandler {
         @KafkaListener(topics = "create-review")
         public void addPoints (String message, Acknowledgment ack){
             OrderDto orderDto = null;
+            Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
+
             try {
                 orderDto = objectMapper.readValue(message, OrderDto.class);
 
                 PointHistory pointHistory = PointHistory.builder()
-                        .memberId(orderDto.getMemberId())
+                        .member(member)
                         .status(false)
                         .amount((long) orderDto.getUsedPoints())
                         .source(PointSource.REVIEW)
