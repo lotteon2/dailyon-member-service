@@ -1,5 +1,6 @@
 package com.dailyon.memeberservice.point.entity;
 
+import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +19,9 @@ public class PointHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
-    private long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private long amount;
@@ -39,14 +41,14 @@ public class PointHistory {
 
     @Builder
     private PointHistory(
-            Long memberId,
+            Member member,
             boolean status,
             Long amount,
             PointSource source,
             String utilize,
             LocalDateTime createdAt
     ){
-        this.memberId = memberId;
+        this.member = member;
         this.status = status;
         this.amount = amount;
         this.source = source;
