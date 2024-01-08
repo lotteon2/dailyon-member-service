@@ -1,5 +1,7 @@
 package com.dailyon.memeberservice.point.kafka;
 
+import com.dailyon.memeberservice.member.entity.Member;
+import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
@@ -21,22 +23,23 @@ public class PointsKafkaHandler {
     private final PointService pointService;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final MemberRepository memberRepository;
 
 
     @KafkaListener(topics = "create-order-use-coupon")
     public void usePoints(String message, Acknowledgment ack) {
         OrderDto orderDto = null;
-
         try {
             orderDto = objectMapper.readValue(message, OrderDto.class);
+            Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
             if(orderDto.getUsedPoints() !=0)
             {
                 PointHistory pointHistory = PointHistory.builder()
-                        .memberId(orderDto.getMemberId())
+                        .member(member)
                         .status(true)
                         .amount((long) orderDto.getUsedPoints())
-                        .source(PointSource.valueOf("BUY"))
+                        .source(PointSource.BUY)
                         .utilize("제품구매")
                         .build();
 
@@ -54,27 +57,28 @@ public class PointsKafkaHandler {
         }
     }
 
-    @KafkaListener(topics = "create-review")
-    public void addPoints (String message, Acknowledgment ack){
-        ReviewDto reviewDto = null;
-        try {
-            reviewDto = objectMapper.readValue(message, ReviewDto.class);
+        @KafkaListener(topics = "create-review")
+        public void addPoints (String message, Acknowledgment ack){
+            OrderDto orderDto = null;
 
-            PointHistory pointHistory = PointHistory.builder()
-                        .memberId(reviewDto.getMemberId())
+            try {
+                Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
+                orderDto = objectMapper.readValue(message, OrderDto.class);
+
+                PointHistory pointHistory = PointHistory.builder()
+                        .member(member)
                         .status(false)
-                        .amount((long) reviewDto.getPoint())
-                        .source(PointSource.valueOf("Review"))
-                        .utilize("리뷰 작성")
+                        .amount((long) orderDto.getUsedPoints())
+                        .source(PointSource.REVIEW)
+                        .utilize("리뷰작성")
                         .build();
 
-            pointService.addPointKafka(pointHistory);
-        }  catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }   catch(Exception e ) {
-            e.printStackTrace();
-        } finally {
-            ack.acknowledge();
+                pointService.addPointKafka(pointHistory);
+                ack.acknowledge();
+            }  catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }   catch(Exception e ) {
+                e.printStackTrace();
         }
     }
 
