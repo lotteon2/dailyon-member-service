@@ -6,6 +6,7 @@ import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
 import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
+import com.dailyon.memeberservice.point.kafka.dto.ReviewDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
 import com.dailyon.memeberservice.point.service.PointService;
@@ -78,8 +79,8 @@ public class PointsKafkaHandler {
                 e.printStackTrace();
             }   catch(Exception e ) {
                 e.printStackTrace();
-            }
         }
+    }
 
         @KafkaListener(topics = "cancel-order")
         public void cancelPoints(String message, Acknowledgment ack) {
