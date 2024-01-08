@@ -91,6 +91,7 @@ public class MemberService {
         response.setBirth(member.getBirth());
         response.setGender(member.getGender());
         response.setPoint(member.getPoint());
+        response.setDeleted(member.isDeleted());
 
         return response;
     }

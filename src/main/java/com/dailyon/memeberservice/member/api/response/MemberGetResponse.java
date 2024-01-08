@@ -20,4 +20,6 @@ public class MemberGetResponse {
     private String birth;
 
     private Long point;
+
+    private boolean isDeleted;
 }
