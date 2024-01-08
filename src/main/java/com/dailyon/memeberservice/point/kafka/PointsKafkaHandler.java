@@ -28,9 +28,9 @@ public class PointsKafkaHandler {
     @KafkaListener(topics = "create-order-use-coupon")
     public void usePoints(String message, Acknowledgment ack) {
         OrderDto orderDto = null;
-        Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
         try {
+            Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
             orderDto = objectMapper.readValue(message, OrderDto.class);
 
             if(orderDto.getUsedPoints() !=0)
@@ -60,9 +60,9 @@ public class PointsKafkaHandler {
         @KafkaListener(topics = "create-review")
         public void addPoints (String message, Acknowledgment ack){
             OrderDto orderDto = null;
-            Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
             try {
+                Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
                 orderDto = objectMapper.readValue(message, OrderDto.class);
 
                 PointHistory pointHistory = PointHistory.builder()
