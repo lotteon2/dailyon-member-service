@@ -28,10 +28,9 @@ public class PointsKafkaHandler {
     @KafkaListener(topics = "create-order-use-coupon")
     public void usePoints(String message, Acknowledgment ack) {
         OrderDto orderDto = null;
-
         try {
-            Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
             orderDto = objectMapper.readValue(message, OrderDto.class);
+            Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
             if(orderDto.getUsedPoints() !=0)
             {
