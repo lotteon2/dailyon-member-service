@@ -59,16 +59,16 @@ public class PointsKafkaHandler {
 
         @KafkaListener(topics = "create-review")
         public void addPoints (String message, Acknowledgment ack){
-            OrderDto orderDto = null;
+            ReviewDto reivewDto = null;
 
             try {
-                Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
-                orderDto = objectMapper.readValue(message, OrderDto.class);
+                reivewDto = objectMapper.readValue(message, ReviewDto.class);
+                Member member = memberRepository.findById(reivewDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
                 PointHistory pointHistory = PointHistory.builder()
                         .member(member)
                         .status(false)
-                        .amount((long) orderDto.getUsedPoints())
+                        .amount(100L)
                         .source(PointSource.REVIEW)
                         .utilize("리뷰작성")
                         .build();
