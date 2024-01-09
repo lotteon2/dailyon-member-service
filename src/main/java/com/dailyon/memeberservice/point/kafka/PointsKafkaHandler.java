@@ -16,6 +16,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class PointsKafkaHandler {
     private final MemberRepository memberRepository;
 
 
+    @Transactional
     @KafkaListener(topics = "create-order-use-coupon")
     public void usePoints(String message, Acknowledgment ack) {
         OrderDto orderDto = null;
