@@ -60,6 +60,7 @@ public class PointsKafkaHandler {
     }
 
         @KafkaListener(topics = "create-review")
+        @Transactional
         public void addPoints (String message, Acknowledgment ack){
             ReviewDto reivewDto = null;
 
