@@ -8,6 +8,7 @@ import com.dailyon.memeberservice.member.config.S3Util;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.kafka.MemberKafkaHandler;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
+import com.dailyon.memeberservice.member.sqs.UserCreatedSqsProducer;
 import dailyon.domain.sns.kafka.dto.MemberCreateDTO;
 import dailyon.domain.sns.kafka.dto.MemberUpdateDTO;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import java.util.UUID;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberKafkaHandler memberKafkaHandler;
+    private final UserCreatedSqsProducer userCreatedSqsProducer;
     private final S3Util s3Util;
 
     @Transactional
@@ -76,6 +78,9 @@ public class MemberService {
                 .code(member.getCode())
                 .build();
         memberKafkaHandler.memberCreateUseSuccessMessage(memberCreateDTO);
+
+        // TODO: sqs 유저생성 발송
+        userCreatedSqsProducer.produce(member.getId());
 
         return member.getId();
     }
