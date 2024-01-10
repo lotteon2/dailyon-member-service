@@ -1,8 +1,11 @@
 package com.dailyon.memeberservice.point.kafka;
 
+import com.dailyon.memeberservice.member.entity.Member;
+import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
+import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
 import com.dailyon.memeberservice.point.kafka.dto.ReviewDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
@@ -13,6 +16,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,22 +24,24 @@ public class PointsKafkaHandler {
     private final PointService pointService;
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final MemberRepository memberRepository;
 
 
+    @Transactional
     @KafkaListener(topics = "create-order-use-coupon")
     public void usePoints(String message, Acknowledgment ack) {
         OrderDto orderDto = null;
-
         try {
             orderDto = objectMapper.readValue(message, OrderDto.class);
+            Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
             if(orderDto.getUsedPoints() !=0)
             {
                 PointHistory pointHistory = PointHistory.builder()
-                        .memberId(orderDto.getMemberId())
+                        .member(member)
                         .status(true)
                         .amount((long) orderDto.getUsedPoints())
-                        .source(PointSource.valueOf("BUY"))
+                        .source(PointSource.BUY)
                         .utilize("제품구매")
                         .build();
 
@@ -54,28 +60,30 @@ public class PointsKafkaHandler {
     }
 
         @KafkaListener(topics = "create-review")
+        @Transactional
         public void addPoints (String message, Acknowledgment ack){
-            ReviewDto reviewDto = null;
+            ReviewDto reivewDto = null;
+
             try {
-                reviewDto = objectMapper.readValue(message, ReviewDto.class);
+                reivewDto = objectMapper.readValue(message, ReviewDto.class);
+                Member member = memberRepository.findById(reivewDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
                 PointHistory pointHistory = PointHistory.builder()
-                        .memberId(reviewDto.getMemberId())
+                        .member(member)
                         .status(false)
-                        .amount((long) reviewDto.getPoint())
-                        .source(PointSource.valueOf("Review"))
-                        .utilize("리뷰 작성")
+                        .amount(100L)
+                        .source(PointSource.REVIEW)
+                        .utilize("리뷰작성")
                         .build();
 
                 pointService.addPointKafka(pointHistory);
+                ack.acknowledge();
             }  catch (JsonProcessingException e) {
                 e.printStackTrace();
             }   catch(Exception e ) {
                 e.printStackTrace();
-            } finally {
-                ack.acknowledge();
-            }
         }
+    }
 
         @KafkaListener(topics = "cancel-order")
         public void cancelPoints(String message, Acknowledgment ack) {
@@ -95,6 +103,21 @@ public class PointsKafkaHandler {
             }
         }
 
+        @KafkaListener(topics = "create-refund")
+        public void refundPoints(String message, Acknowledgment ack) {
+            RefundDTO refundDto = null;
+            try {
+                refundDto = objectMapper.readValue(message, RefundDTO.class);
+                if(refundDto.getRefundPoints() !=0) {
+                    pointService.refundUsePoints(refundDto);
+                }
+                ack.acknowledge();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            } catch(Exception e ) {
+                e.printStackTrace();
+            }
+        }
 
     public void rollbackTransaction(OrderDto orderDto) {
         try {
@@ -106,7 +129,6 @@ public class PointsKafkaHandler {
             e.printStackTrace();
         }
     }
-
 
 
     public void producePointUseSuccessMessage(OrderDto orderDto){
