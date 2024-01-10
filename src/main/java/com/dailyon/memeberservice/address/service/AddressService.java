@@ -125,7 +125,6 @@ public class AddressService {
         if (!addressToDelete.getMember().equals(member)) {
             throw new RuntimeException("Address does not belong to the member");
         }
-        //addressRepository.delete(addressToDelete);
         addressRepository.deleteById(addressToDelete.getId());
         return addressId;
     }
@@ -153,20 +152,15 @@ public class AddressService {
         );
 
         if(request.getIsDefault()){
-            log.info("true");
             List<Address> addresses = addressRepository.findByMemberId(memberId);
 
             for (Address addr : addresses) {
-                // 모든 주소의 isDefault를 false로 초기화
                 addr.setIsDefault(false);
 
-                // request의 addressId와 같은 주소만 isDefault를 true로 변경
                 if (addr.getId().equals(request.getAddressId())) {
                     addr.setIsDefault(true);
                 }
             }
-        } else {
-            log.info("false");
         }
 
         return request.getAddressId();
