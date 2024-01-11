@@ -12,15 +12,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserCreatedSqsProducer {
     private final QueueMessagingTemplate sqsTemplate;
-    private final String notificationQueue = "user-created-queue";
+    public static final String UserCreatedNotificationQueue = "user-created-queue";
 
     public void produce(Long memberId) {
             try {
                 Message<String> message = MessageBuilder.withPayload(memberId.toString()).build();
-                sqsTemplate.send(notificationQueue, message);
+                sqsTemplate.send(UserCreatedNotificationQueue, message);
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
         }
-    }
 }
