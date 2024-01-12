@@ -1,16 +1,14 @@
 package com.dailyon.memeberservice.point.service;
 
-import com.dailyon.memeberservice.address.api.response.AddressGetResponse;
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
-import com.dailyon.memeberservice.member.service.MemberService;
 import com.dailyon.memeberservice.point.api.request.PointHistoryRequest;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.api.response.GetPointHistory;
 import com.dailyon.memeberservice.point.entity.PointHistory;
-import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
 import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
 import com.dailyon.memeberservice.point.repository.PointRepository;
+import dailyon.domain.order.kafka.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +16,8 @@ import org.springframework.stereotype.Service;
 
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
 @Transactional
@@ -86,7 +81,7 @@ public class PointService {
         member.changePoint(pointHistory.getAmount());
     }
 
-    public void rollbackUsePoints(OrderDto orderDto) {
+    public void rollbackUsePoints(OrderDTO orderDto) {
         Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
 
