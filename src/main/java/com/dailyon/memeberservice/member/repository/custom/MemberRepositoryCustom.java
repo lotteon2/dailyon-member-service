@@ -7,4 +7,5 @@ public interface MemberRepositoryCustom {
 
     Long findPointsById(Long memberId);
 
+    Member findByCode(String referralCode);
 }

@@ -27,5 +27,12 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom{
         return points;
     }
 
+    @Override
+    public Member findByCode(String referralCode) {
+        return entityManager.createQuery("SELECT m FROM Member m WHERE m.code = :referralCode", Member.class)
+                .setParameter("referralCode", referralCode)
+                .getSingleResult();
+    }
+
 
 }
