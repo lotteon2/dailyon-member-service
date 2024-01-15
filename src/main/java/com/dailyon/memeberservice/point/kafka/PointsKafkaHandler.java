@@ -4,11 +4,9 @@ import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
-import com.dailyon.memeberservice.point.kafka.dto.OrderDto;
 import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
 import com.dailyon.memeberservice.point.kafka.dto.ReviewDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.dailyon.memeberservice.point.kafka.dto.enums.OrderEvent;
 import com.dailyon.memeberservice.point.service.PointService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +15,9 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.transaction.annotation.Transactional;
+
+import dailyon.domain.order.kafka.OrderDTO;
+import dailyon.domain.order.kafka.enums.OrderEvent;
 
 @Component
 @RequiredArgsConstructor
@@ -30,9 +31,9 @@ public class PointsKafkaHandler {
     @Transactional
     @KafkaListener(topics = "create-order-use-coupon")
     public void usePoints(String message, Acknowledgment ack) {
-        OrderDto orderDto = null;
+        OrderDTO orderDto = null;
         try {
-            orderDto = objectMapper.readValue(message, OrderDto.class);
+            orderDto = objectMapper.readValue(message, OrderDTO.class);
             Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
 
             if(orderDto.getUsedPoints() !=0)
@@ -46,6 +47,20 @@ public class PointsKafkaHandler {
                         .build();
 
                 pointService.usePointKafka(pointHistory);
+            }
+
+            if(orderDto.getReferralCode() != null) {
+                Member refMember = memberRepository.findByCode(orderDto.getReferralCode());
+
+                PointHistory pointHistory = PointHistory.builder()
+                        .member(refMember)
+                        .status(false)
+                        .amount(100L)
+                        .source(PointSource.PARTNERS)
+                        .utilize("")
+                        .build();
+
+                pointService.addPointKafka(pointHistory);
             }
 
             producePointUseSuccessMessage(orderDto);
@@ -73,7 +88,7 @@ public class PointsKafkaHandler {
                         .status(false)
                         .amount(100L)
                         .source(PointSource.REVIEW)
-                        .utilize("리뷰작성")
+                        .utilize("")
                         .build();
 
                 pointService.addPointKafka(pointHistory);
@@ -87,9 +102,9 @@ public class PointsKafkaHandler {
 
         @KafkaListener(topics = "cancel-order")
         public void cancelPoints(String message, Acknowledgment ack) {
-            OrderDto orderDto = null;
+            OrderDTO orderDto = null;
             try {
-                orderDto = objectMapper.readValue(message, OrderDto.class);
+                orderDto = objectMapper.readValue(message, OrderDTO.class);
 
                 if (OrderEvent.PAYMENT_FAIL.equals(orderDto.getOrderEvent())) {
                     pointService.rollbackUsePoints(orderDto);
@@ -119,7 +134,7 @@ public class PointsKafkaHandler {
             }
         }
 
-    public void rollbackTransaction(OrderDto orderDto) {
+    public void rollbackTransaction(OrderDTO orderDto) {
         try {
             orderDto.setOrderEvent(OrderEvent.POINT_FAIL);
             kafkaTemplate.send("cancel-order", objectMapper.writeValueAsString(orderDto));
@@ -131,7 +146,7 @@ public class PointsKafkaHandler {
     }
 
 
-    public void producePointUseSuccessMessage(OrderDto orderDto){
+    public void producePointUseSuccessMessage(OrderDTO orderDto){
         try{
             String data = objectMapper.writeValueAsString(orderDto);
             kafkaTemplate.send("use-member-points", data);
