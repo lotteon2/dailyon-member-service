@@ -79,8 +79,7 @@ public class MemberService {
                 .build();
         memberKafkaHandler.memberCreateUseSuccessMessage(memberCreateDTO);
 
-        // TODO: sqs 유저생성 발송
-        userCreatedSqsProducer.produce(member.getId());
+        userCreatedSqsProducer.produceUserCreatedQueue(member.getId());
 
         return member.getId();
     }

@@ -2,6 +2,9 @@ package com.dailyon.memeberservice.point.kafka;
 
 import com.dailyon.memeberservice.member.entity.Member;
 import com.dailyon.memeberservice.member.repository.MemberRepository;
+import com.dailyon.memeberservice.member.sqs.UserCreatedSqsProducer;
+import com.dailyon.memeberservice.member.sqs.dto.RawNotificationData;
+import com.dailyon.memeberservice.member.sqs.dto.SQSNotificationDto;
 import com.dailyon.memeberservice.point.api.request.PointSource;
 import com.dailyon.memeberservice.point.entity.PointHistory;
 import com.dailyon.memeberservice.point.kafka.dto.RefundDTO;
@@ -19,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import dailyon.domain.order.kafka.OrderDTO;
 import dailyon.domain.order.kafka.enums.OrderEvent;
 
+import static com.dailyon.memeberservice.member.sqs.UserCreatedSqsProducer.PointEarnedSnsNotificationQueue;
+
 @Component
 @RequiredArgsConstructor
 public class PointsKafkaHandler {
@@ -26,6 +31,7 @@ public class PointsKafkaHandler {
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final MemberRepository memberRepository;
+    private final UserCreatedSqsProducer userCreatedSqsProducer;
 
 
     @Transactional
@@ -49,21 +55,27 @@ public class PointsKafkaHandler {
                 pointService.usePointKafka(pointHistory);
             }
 
-            if(orderDto.getReferralCode() != null) {
+            if(orderDto.getReferralCode() != null && !member.getCode().equals(orderDto.getReferralCode())) {
+                Long fixedPointAmount = 100L;
+
                 Member refMember = memberRepository.findByCode(orderDto.getReferralCode());
 
                 PointHistory pointHistory = PointHistory.builder()
                         .member(refMember)
                         .status(false)
-                        .amount(100L)
+                        .amount(fixedPointAmount)
                         .source(PointSource.PARTNERS)
                         .utilize("")
                         .build();
-
                 pointService.addPointKafka(pointHistory);
+
+                RawNotificationData rawNotificationData = RawNotificationData.forPointEarnedByReferralCode(fixedPointAmount);
+                SQSNotificationDto sqsNotificationDto = SQSNotificationDto.of(refMember.getId(), rawNotificationData);
+                userCreatedSqsProducer.produce(PointEarnedSnsNotificationQueue, sqsNotificationDto);
             }
 
             producePointUseSuccessMessage(orderDto);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (Exception e) {
