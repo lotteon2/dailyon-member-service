@@ -51,9 +51,10 @@ public class MemberApiController {
     }
 
     @GetMapping("/profileimg")
-    public ResponseEntity<String> preurl(@RequestHeader Long memberId){
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.geturl(memberId));
+    public ResponseEntity<String> preurl(@RequestHeader Long memberId, @RequestHeader String imgName){
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.createPresignedUrl(memberId, imgName));
     }
+
 
 
 }
