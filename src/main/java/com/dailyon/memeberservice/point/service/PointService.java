@@ -75,9 +75,11 @@ public class PointService {
 
     @Transactional
     public void addPointKafka(PointHistory pointHistory ) {
+        log.info("addPointKafka입장");
         pointRepository.save(pointHistory);
 
         Member member = pointHistory.getMember();
+        log.info("포인트 적립해줄 member객체" + member.toString());
         member.changePoint(pointHistory.getAmount());
     }
 
