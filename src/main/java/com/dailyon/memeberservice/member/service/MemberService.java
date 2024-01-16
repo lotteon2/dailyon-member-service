@@ -145,12 +145,17 @@ public class MemberService {
     }
 
 
+    @Transactional
     public String geturl(Long id) {
         Member member = memberRepository.findById(id).orElseThrow();
 
-        String memberUrl = s3Util.getPreSignedUrl(member.getProfileImgUrl());
+        String uuid = UUID.randomUUID().toString();
+        String url = s3Util.createFilePath("//." + uuid);
+        log.info("//." + uuid);
 
-        return memberUrl;
+        member.changeImg(url);
+
+        return s3Util.getPreSignedUrl(member.getProfileImgUrl());
 
     }
 }

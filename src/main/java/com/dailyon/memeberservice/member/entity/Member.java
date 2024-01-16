@@ -90,6 +90,10 @@ public class Member {
         this.birth = birth;
     }
 
+    public void changeImg(String profileImgUrl){
+        this.profileImgUrl = profileImgUrl;
+    }
+
     public void changePoint(Long amount) {
         if (this.point + amount < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough points");
