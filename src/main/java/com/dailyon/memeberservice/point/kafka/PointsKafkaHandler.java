@@ -44,9 +44,6 @@ public class PointsKafkaHandler {
         try {
             orderDto = objectMapper.readValue(message, OrderDTO.class);
             Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
-            log.info("들어온orderDto" + orderDto.toString());
-            log.info("조회한member" + member.toString());
-            log.info("orderDto의 레퍼럴코드" + orderDto.getReferralCode().toString());
 
             if(orderDto.getUsedPoints() !=0)
             {
