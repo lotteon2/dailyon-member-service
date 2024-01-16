@@ -144,13 +144,14 @@ public class MemberService {
         return point;
     }
 
-
-    public String geturl(Long id) {
+    @Transactional
+    public String createPresignedUrl(Long id,String img){
         Member member = memberRepository.findById(id).orElseThrow();
 
-        String memberUrl = s3Util.getPreSignedUrl(member.getProfileImgUrl());
+        String url = s3Util.createFilePath(img);
 
-        return memberUrl;
+        member.changeImg(url);
 
+        return s3Util.getPreSignedUrl(member.getProfileImgUrl());
     }
 }
