@@ -152,6 +152,15 @@ public class MemberService {
 
         member.changeImg(url);
 
+        MemberUpdateDTO memberUpdateDTO = MemberUpdateDTO.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .profileImgUrl(member.getProfileImgUrl())
+                .build();
+        memberKafkaHandler.memberUpdateUseSuccessMessage(memberUpdateDTO);
+
         return s3Util.getPreSignedUrl(member.getProfileImgUrl());
     }
+
+
 }
