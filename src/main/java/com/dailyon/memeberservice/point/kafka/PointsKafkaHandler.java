@@ -44,7 +44,7 @@ public class PointsKafkaHandler {
         try {
             orderDto = objectMapper.readValue(message, OrderDTO.class);
             Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
-
+          
             if(orderDto.getUsedPoints() !=0)
             {
                 PointHistory pointHistory = PointHistory.builder()
@@ -59,7 +59,6 @@ public class PointsKafkaHandler {
             }
 
             if(orderDto.getReferralCode() != null && !member.getCode().equals(orderDto.getReferralCode())) {
-                log.info("레퍼럴코드 있어서 if문으로 입장");
                 Long fixedPointAmount = 100L;
 
                 Member refMember = memberRepository.findByCode(orderDto.getReferralCode());
@@ -71,13 +70,10 @@ public class PointsKafkaHandler {
                         .source(PointSource.PARTNERS)
                         .utilize("")
                         .build();
-                log.info("pointHistory 객체" + pointHistory.toString());
                 pointService.addPointKafka(pointHistory);
-                log.info("카프카 보냈습니다.");
 
                 RawNotificationData rawNotificationData = RawNotificationData.forPointEarnedByReferralCode(fixedPointAmount);
                 SQSNotificationDto sqsNotificationDto = SQSNotificationDto.of(refMember.getId(), rawNotificationData);
-                log.info("sqs로 보낼 sqsNotificationDto"+ sqsNotificationDto.toString());
                 userCreatedSqsProducer.produce(PointEarnedSnsNotificationQueue, sqsNotificationDto);
             }
 
