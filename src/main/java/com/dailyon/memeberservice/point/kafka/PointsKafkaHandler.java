@@ -44,6 +44,7 @@ public class PointsKafkaHandler {
         try {
             orderDto = objectMapper.readValue(message, OrderDTO.class);
             Member member = memberRepository.findById(orderDto.getMemberId()).orElseThrow(() -> new RuntimeException("Member not found"));
+          
             if(orderDto.getUsedPoints() !=0)
             {
                 PointHistory pointHistory = PointHistory.builder()
