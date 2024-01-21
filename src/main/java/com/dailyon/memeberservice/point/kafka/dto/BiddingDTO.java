@@ -1,15 +1,14 @@
 package com.dailyon.memeberservice.point.kafka.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BiddingDTO {
-    private Long memberId;
-    private Long usePoints;
+  private String auctionId;
+  private Long memberId;
+  private Long usePoints;
 }

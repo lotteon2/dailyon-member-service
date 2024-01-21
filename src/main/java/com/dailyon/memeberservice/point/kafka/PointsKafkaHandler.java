@@ -190,7 +190,7 @@ public class PointsKafkaHandler {
             PointHistory pointHistory =
                     PointHistory.builder()
                             .member(member)
-                            .status(false)
+                            .status(true)
                             .amount(biddingDTO.getUsePoints())
                             .source(PointSource.AUCTION)
                             .utilize("사용")
