@@ -60,7 +60,7 @@ dependencies {
     // aws sqs mock
     testImplementation 'io.findify:sqsmock_2.12:0.4.1'
 
-    implementation group: 'io.github.dailyon-maven', name: 'daily-on-common', version: '0.0.8'
+    implementation group: 'io.github.dailyon-maven', name: 'daily-on-common', version: '0.1.0'
 
 }
 
